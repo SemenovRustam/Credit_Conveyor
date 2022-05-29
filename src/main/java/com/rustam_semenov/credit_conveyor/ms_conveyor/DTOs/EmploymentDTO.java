@@ -6,17 +6,10 @@ import java.math.BigDecimal;
 
 @Data
 public class EmploymentDTO {
-
-    private final Enum employmentStatus;
-
+    private final EmploymentStatus employmentStatus;
     private final String employerINN;
-
     private final BigDecimal salary;
-
-    private final Enum position;
-
+    private final Position position;
     private final Integer workExperienceTotal;
-
     private final Integer workExperienceCurrent;
-
 }
