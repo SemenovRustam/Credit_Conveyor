@@ -15,8 +15,7 @@ import java.util.Collections;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
-@Import(ConveyorController.class)
-public class MyConfig {
+public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)

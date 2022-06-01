@@ -1,10 +1,15 @@
 package com.rustam_semenov.credit_conveyor.ms_conveyor.service;
 
-import com.rustam_semenov.credit_conveyor.ms_conveyor.DTOs.*;
-import com.rustam_semenov.credit_conveyor.ms_conveyor.ValidationData.ValidateLoanApplication;
+import com.rustam_semenov.credit_conveyor.ms_conveyor.dto.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,36 +18,51 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
+@RunWith(MockitoJUnitRunner.class)
 class ConveyorServiceImplTest {
-    ValidateLoanApplication validateLoanApplication = new ValidateLoanApplication();
-    ConveyorServiceImpl conveyorService = new ConveyorServiceImpl(validateLoanApplication);
+
+    @Spy
+    @InjectMocks
+    private final ConveyorServiceImpl conveyorService = new ConveyorServiceImpl();
+
+    @BeforeEach
+    public void setUp() {
+        ReflectionTestUtils.setField(conveyorService, "baseRate", 10);
+    }
 
     @Test
     void calculateRateByInsuranceTest() {
-        BigDecimal rate = BigDecimal.valueOf(10);
+        BigDecimal rate = BigDecimal.TEN;
 
         BigDecimal actualRate = conveyorService.calculateRateByInsurance(true, rate);
         BigDecimal expectedRate = BigDecimal.valueOf(8);
+
         Assertions.assertEquals(expectedRate, actualRate);
     }
 
     @Test
     void calculateCreditConditionsTest() {
-        EmploymentDTO employmentDTOTest = new EmploymentDTO(EmploymentStatus.DIRECTOR, Mockito.any(), BigDecimal.valueOf(15000), Position.MANAGER, 13, 4);
-        ScoringDataDTO scoringDataDTOTest = new ScoringDataDTO(BigDecimal.valueOf(100000), 24, "Rustam", "Semenov", "Viktorovich", Gender.MALE,
-                LocalDate.EPOCH, "4444", "111111", Mockito.any(), Mockito.any(), MaritalStatus.MARRIED,
-                1, employmentDTOTest, Mockito.any(), true, false);
+        int expectedRate = 5;
+
+        EmploymentDTO employmentDTOTest = new EmploymentDTO(EmploymentStatus.DIRECTOR,
+                "inn", BigDecimal.valueOf(15000), Position.MANAGER, 13, 4);
+
+        ScoringDataDTO scoringDataDTOTest = new ScoringDataDTO(BigDecimal.valueOf(100000), 24, "Ivan", "Ivanon", "Ivanonovich",
+                Gender.MALE, LocalDate.EPOCH, "123456", "1234", LocalDate.ofEpochDay(1996-01-17), "KRSK", MaritalStatus.MARRIED,
+                1, employmentDTOTest, "account", true, false);
 
         CreditDTO actualCreditDTO = conveyorService.calculateCreditConditions(scoringDataDTOTest);
 
-        Assertions.assertEquals(5, actualCreditDTO.getRate().intValue());
+        Assertions.assertEquals(expectedRate, actualCreditDTO.getRate().intValue());
     }
-
 
     @Test
     void getLoanOffersTest() {
-        LoanApplicationRequestDTO loanApplicationRequestDTO = new LoanApplicationRequestDTO(BigDecimal.valueOf(100000), 60, "Vasiliy", "Petrov",
-                "Ivanov", "zevdgfh@yandex.ru", LocalDate.EPOCH, "4444", "999333");
+        LoanApplicationRequestDTO loanAppMock = Mockito.mock(LoanApplicationRequestDTO.class);
+        Mockito.when(loanAppMock.getAmount()).thenReturn(BigDecimal.valueOf(100000));
+        Mockito.when(loanAppMock.getTerm()).thenReturn(60);
+        Mockito.when(loanAppMock.getBirthdate()).thenReturn(LocalDate.ofEpochDay(1996-01-17));
 
         List<LoanOfferDTO> expectedLoanOffers = Stream.of(
                 new LoanOfferDTO(1L, BigDecimal.valueOf(100000), BigDecimal.valueOf(112000), 60, BigDecimal.valueOf(1866.67), BigDecimal.valueOf(6), true, true),
@@ -52,25 +72,22 @@ class ConveyorServiceImplTest {
         )
                 .sorted(Comparator.comparing(LoanOfferDTO::getRate).reversed())
                 .collect(Collectors.toList());
-        List<LoanOfferDTO> actualLoanOffers = conveyorService.getLoanOffers(loanApplicationRequestDTO);
+        List<LoanOfferDTO> actualLoanOffers = conveyorService.getLoanOffers(loanAppMock);
 
         Assertions.assertEquals(expectedLoanOffers, actualLoanOffers);
     }
 
-
     @Test
     void getAvailableOfferDTO() {
-        LoanApplicationRequestDTO testLoanApplicationRequestDTO = new LoanApplicationRequestDTO(BigDecimal.valueOf(100000), 60, "Rustam", "Semenov",
-                "Viktorovich", "zeevvss@yandex.ru", LocalDate.EPOCH, "4444", "999333");
+        LoanApplicationRequestDTO loanAppMock1 = Mockito.mock(LoanApplicationRequestDTO.class);
+        Mockito.when(loanAppMock1.getAmount()).thenReturn(BigDecimal.valueOf(100000));
+        Mockito.when(loanAppMock1.getTerm()).thenReturn(60);
+        Mockito.when(loanAppMock1.getBirthdate()).thenReturn(LocalDate.ofEpochDay(1996-01-17));
+
         LoanOfferDTO expectedOfferDTO = new LoanOfferDTO(1L, BigDecimal.valueOf(100000), BigDecimal.valueOf(112000).setScale(0), 60, BigDecimal.valueOf(1866.67),
                 BigDecimal.valueOf(6), true, true);
+        LoanOfferDTO actualOfferDTO = conveyorService.getAvailableOfferDTO(1L, true, true, loanAppMock1);
 
-        LoanOfferDTO actualOfferDTO = conveyorService.getAvailableOfferDTO(1L, true, true, testLoanApplicationRequestDTO);
-
-        System.out.println(actualOfferDTO);
-        System.out.println(expectedOfferDTO);
         Assertions.assertEquals(expectedOfferDTO, actualOfferDTO);
     }
-
-
 }

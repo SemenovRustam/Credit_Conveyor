@@ -1,9 +1,9 @@
 package com.rustam_semenov.credit_conveyor.ms_conveyor.service;
 
-import com.rustam_semenov.credit_conveyor.ms_conveyor.DTOs.CreditDTO;
-import com.rustam_semenov.credit_conveyor.ms_conveyor.DTOs.LoanApplicationRequestDTO;
-import com.rustam_semenov.credit_conveyor.ms_conveyor.DTOs.LoanOfferDTO;
-import com.rustam_semenov.credit_conveyor.ms_conveyor.DTOs.ScoringDataDTO;
+import com.rustam_semenov.credit_conveyor.ms_conveyor.dto.CreditDTO;
+import com.rustam_semenov.credit_conveyor.ms_conveyor.dto.LoanApplicationRequestDTO;
+import com.rustam_semenov.credit_conveyor.ms_conveyor.dto.LoanOfferDTO;
+import com.rustam_semenov.credit_conveyor.ms_conveyor.dto.ScoringDataDTO;
 
 import java.util.List;
 
