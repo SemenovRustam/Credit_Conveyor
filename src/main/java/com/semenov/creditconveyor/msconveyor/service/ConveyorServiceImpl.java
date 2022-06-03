@@ -40,9 +40,10 @@ public class ConveyorServiceImpl implements ConveyorService {
     private static final int MIN_CURRENT_WORK_EXPERIENCE = 3;
     private static final int MIN_TOTAL_WORK_EXPERIENCE = 12;
     private static final int ADULT = 18;
+    private static final int QUANTITY_MONTHS = 12;
 
     @Value("${custom.rate.base}")
-    private  Integer baseRate;
+    private Integer baseRate;
 
     @Override
     public List<LoanOfferDTO> getLoanOffers(LoanApplicationRequestDTO loanApplicationRequestDTO) {
@@ -64,19 +65,20 @@ public class ConveyorServiceImpl implements ConveyorService {
         if (Period.between(loanApplicationRequestDTO.getBirthdate(), LocalDate.now()).getYears() < ADULT) {
             throw new ValidationException("Age must be over 18");
         }
-
         BigDecimal rate = BASE_RATE;
-        BigDecimal totalAmount = loanApplicationRequestDTO.getAmount();
+        BigDecimal requestAmount = loanApplicationRequestDTO.getAmount();
         Integer term = loanApplicationRequestDTO.getTerm();
-        BigDecimal margin = totalAmount.multiply((rate.divide(PERCENT, 2, RoundingMode.HALF_EVEN))); //margin - credit coast
         rate = calculateRateBySalaryClient(isSalaryClient, rate);
         rate = calculateRateByInsurance(isInsuranceEnabled, rate);
+        BigDecimal monthlyPercent = rate.divide(BigDecimal.valueOf(QUANTITY_MONTHS), 2, RoundingMode.HALF_EVEN);
+        BigDecimal creditCoast = (requestAmount.divide(PERCENT, 2, RoundingMode.HALF_EVEN)).multiply(monthlyPercent).multiply(BigDecimal.valueOf(term));
 
+        BigDecimal totalAmount = requestAmount;
         if (isInsuranceEnabled) {
-            BigDecimal insuranceCoast = totalAmount.multiply(INSURANCE_RATE);
+            BigDecimal insuranceCoast = requestAmount.multiply(INSURANCE_RATE);
             totalAmount = totalAmount.add(insuranceCoast);
         }
-        totalAmount = totalAmount.add(margin);
+        totalAmount = totalAmount.add(creditCoast);
         BigDecimal monthlyPayment = calculateMonthlyPayment(totalAmount, term);
         LoanOfferDTO loanOffer = LoanOfferDTO.builder().
                 applicationId(applicationId).
@@ -100,8 +102,8 @@ public class ConveyorServiceImpl implements ConveyorService {
         log.info("STARTED CALCULATE CREDIT CONDITION\n");
         BigDecimal amount = scoringDataDTO.getAmount();
         BigDecimal rate = scoringRate(scoringDataDTO);
-        BigDecimal psk = calculatePSK(scoringDataDTO, rate);
         Integer term = scoringDataDTO.getTerm();
+        BigDecimal psk = calculatePSK(scoringDataDTO, rate);
         BigDecimal monthlyPayment = calculateMonthlyPayment(psk, term);
         List<PaymentScheduleElement> paymentScheduleElements = getPaymentSchedule(amount, term, psk, monthlyPayment, rate);
         log.info("FINISHED CALCULATE CREDIT CONDITION\n");
@@ -134,12 +136,13 @@ public class ConveyorServiceImpl implements ConveyorService {
 
     private BigDecimal calculatePSK(ScoringDataDTO scoringDataDTO, BigDecimal rate) {
         log.info("STARTED CALCULATE PSK");
-        BigDecimal psk = scoringDataDTO.getAmount();
-
-        BigDecimal creditCoast = (psk.divide(PERCENT, 2, RoundingMode.HALF_EVEN)).multiply(rate);
-        psk = psk.add(creditCoast);
+        BigDecimal monthlyPercent = rate.divide(BigDecimal.valueOf(QUANTITY_MONTHS), 2, RoundingMode.HALF_EVEN);
+        BigDecimal requestAmount = scoringDataDTO.getAmount();
+        BigDecimal creditCoast = (requestAmount.divide(PERCENT, 2, RoundingMode.HALF_EVEN))
+                .multiply(monthlyPercent).multiply(BigDecimal.valueOf(scoringDataDTO.getTerm()));
+        BigDecimal psk = requestAmount.add(creditCoast);
         if (Boolean.TRUE.equals(scoringDataDTO.getIsInsuranceEnabled())) {
-            BigDecimal insuranceCoast = scoringDataDTO.getAmount().multiply(INSURANCE_RATE);
+            BigDecimal insuranceCoast = requestAmount.multiply(INSURANCE_RATE);
             psk = psk.add(insuranceCoast);
         }
         log.info("FINISHED CALCULATE PSK");
