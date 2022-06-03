@@ -1,6 +1,14 @@
 package com.semenov.creditconveyor.msconveyor.service;
 
-import com.semenov.creditconveyor.msconveyor.dto.*;
+import com.semenov.creditconveyor.msconveyor.dto.CreditDTO;
+import com.semenov.creditconveyor.msconveyor.dto.EmploymentStatus;
+import com.semenov.creditconveyor.msconveyor.dto.Gender;
+import com.semenov.creditconveyor.msconveyor.dto.LoanApplicationRequestDTO;
+import com.semenov.creditconveyor.msconveyor.dto.LoanOfferDTO;
+import com.semenov.creditconveyor.msconveyor.dto.MaritalStatus;
+import com.semenov.creditconveyor.msconveyor.dto.PaymentScheduleElement;
+import com.semenov.creditconveyor.msconveyor.dto.Position;
+import com.semenov.creditconveyor.msconveyor.dto.ScoringDataDTO;
 import com.semenov.creditconveyor.msconveyor.exceptionhandling.ScoringException;
 import com.semenov.creditconveyor.msconveyor.exceptionhandling.ValidationException;
 import lombok.extern.slf4j.Slf4j;

@@ -18,7 +18,7 @@ public class SwaggerConfig {
     public Docket getApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.rustam_semenov.credit_conveyor.ms_conveyor.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.semenov.creditconveyor.msconveyor.controller"))
                 .paths(regex("/api.*"))
                 .build()
                 .apiInfo(getApiInfo());
