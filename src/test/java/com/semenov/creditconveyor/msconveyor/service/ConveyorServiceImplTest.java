@@ -12,8 +12,7 @@ import com.semenov.creditconveyor.msconveyor.dto.ScoringDataDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -31,9 +30,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 class ConveyorServiceImplTest {
 
-    @Spy
-    @InjectMocks
-    private final ConveyorServiceImpl conveyorService = new ConveyorServiceImpl();
+    @Mock
+    ConveyorServiceImpl conveyorService = new ConveyorServiceImpl();
 
     @BeforeEach
     public void setUp() {

@@ -8,24 +8,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<IncorrectData> handlerException(ValidationException exception) {
-        IncorrectData data = new IncorrectData();
-        data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ScoringException.class)
-    public ResponseEntity<IncorrectData> handlerException(ScoringException exception) {
-        IncorrectData data = new IncorrectData();
-        data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({ValidationException.class, ScoringException.class, Exception.class})
     public ResponseEntity<IncorrectData> handlerException(Exception exception) {
         IncorrectData data = new IncorrectData();
         data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }
 }
