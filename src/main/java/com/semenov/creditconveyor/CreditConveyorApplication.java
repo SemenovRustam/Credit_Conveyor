@@ -1,4 +1,4 @@
-package com.rustam_semenov.credit_conveyor;
+package com.semenov.creditconveyor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
