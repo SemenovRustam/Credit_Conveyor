@@ -1,4 +1,4 @@
-package com.semenov.demo;
+package com.semenov.deal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
