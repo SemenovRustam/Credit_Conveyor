@@ -253,7 +253,7 @@ public class ConveyorServiceImpl implements ConveyorService {
 
     private BigDecimal calculateRateByEmploymentPosition(ScoringDataDTO scoringDataDTO, BigDecimal creditRate) {
         log.info("STARTED CALCULATE  RATE BY EMPLOYMENT POSITION");
-        if (scoringDataDTO.getEmployment().getPosition() == Position.MANAGER) {
+        if (scoringDataDTO.getEmployment().getPosition() == Position.WORKER) {
             creditRate = creditRate.subtract(BigDecimal.valueOf(2));
         }
         if (scoringDataDTO.getEmployment().getPosition() == Position.TOP_MANAGER) {
@@ -268,7 +268,7 @@ public class ConveyorServiceImpl implements ConveyorService {
         if (scoringDataDTO.getEmployment().getEmploymentStatus() == EmploymentStatus.SELF_EMPLOYED) {
             creditRate = creditRate.add(BigDecimal.ONE);
         }
-        if (scoringDataDTO.getEmployment().getEmploymentStatus() == EmploymentStatus.DIRECTOR) {
+        if (scoringDataDTO.getEmployment().getEmploymentStatus() == EmploymentStatus.BUSINESS_OWNER) {
             creditRate = creditRate.add(BigDecimal.valueOf(3));
         }
         log.info("FINISHED CALCULATE  RATE BY EMPLOYEE STATUS");

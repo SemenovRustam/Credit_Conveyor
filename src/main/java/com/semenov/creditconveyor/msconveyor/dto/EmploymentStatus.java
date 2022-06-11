@@ -6,5 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public enum EmploymentStatus {
     UNEMPLOYED,
     SELF_EMPLOYED,
-    DIRECTOR
+    EMPLOYED,
+    BUSINESS_OWNER
 }

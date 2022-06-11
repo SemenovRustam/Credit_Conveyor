@@ -42,10 +42,10 @@ class ConveyorServiceImplTest {
     void calculateCreditConditionsTest() {
         int expectedRate = 5;
 
-        EmploymentDTO employmentDTOTest = EmploymentDTO.builder().employmentStatus(EmploymentStatus.DIRECTOR)
+        EmploymentDTO employmentDTOTest = EmploymentDTO.builder().employmentStatus(EmploymentStatus.BUSINESS_OWNER)
                 .employerINN("inn")
                 .salary(BigDecimal.valueOf(15000))
-                .position(Position.MANAGER)
+                .position(Position.WORKER)
                 .workExperienceTotal(13)
                 .workExperienceCurrent(4)
                 .build();
