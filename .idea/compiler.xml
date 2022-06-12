@@ -10,13 +10,13 @@
         <module name="credit_conveyor" />
         <module name="appdemo" />
         <module name="demoapp" />
-        <module name="demo" />
+        <module name="deal" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="appdemo" target="17" />
       <module name="credit_conveyor" target="11" />
-      <module name="demo" target="11" />
+      <module name="deal" target="11" />
       <module name="demoapp" target="11" />
     </bytecodeTargetLevel>
   </component>
@@ -24,7 +24,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="appdemo" options="-parameters" />
       <module name="credit_conveyor" options="-parameters" />
-      <module name="demo" options="-parameters" />
+      <module name="deal" options="-parameters" />
       <module name="demoapp" options="-parameters" />
     </option>
   </component>
