@@ -1,8 +1,10 @@
-package com.semenov.application.application;
+package com.semenov.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@EnableFeignClients("com.semenov.application.client")
 @SpringBootApplication
 public class Application {
 
