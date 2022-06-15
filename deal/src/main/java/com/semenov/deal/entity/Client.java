@@ -5,7 +5,11 @@ import com.semenov.deal.model.Gender;
 import com.semenov.deal.model.MaritalStatus;
 import com.semenov.deal.model.Passport;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
@@ -28,9 +32,10 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "client")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-@Getter
-@Setter
-@ToString
+@Builder
+@NoArgsConstructor
+@Data
+@AllArgsConstructor
 public class Client {
 
     @Id
@@ -85,7 +90,4 @@ public class Client {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     private Application application;
-
-    public Client() {
-    }
 }

@@ -3,22 +3,20 @@ package com.semenov.deal.dto;
 import com.semenov.deal.model.Gender;
 import com.semenov.deal.model.MaritalStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@NoArgsConstructor
 @Data
+@AllArgsConstructor
 @Schema(description = "Данные для оценки")
 @Builder
 public class ScoringDataDTO {
-
 
     @Schema(description = "Сумма", example = "10000")
     private BigDecimal amount;

@@ -4,7 +4,11 @@ import com.semenov.deal.dto.LoanOfferDTO;
 import com.semenov.deal.model.ApplicationHistory;
 import com.semenov.deal.model.Status;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
@@ -26,9 +30,10 @@ import java.util.List;
 @Entity
 @Table(name = "application")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-@Getter
-@Setter
-@ToString
+@Builder
+@NoArgsConstructor
+@Data
+@AllArgsConstructor
 public class Application {
 
     @Id
@@ -63,7 +68,4 @@ public class Application {
     @Type(type = "jsonb")
     @Column(name = "status_history", columnDefinition = "jsonb")
     private List<ApplicationHistory> statusHistory;
-
-    public Application() {
-    }
 }

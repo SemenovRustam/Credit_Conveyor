@@ -3,7 +3,9 @@ package com.semenov.deal.entity;
 import com.semenov.deal.dto.PaymentScheduleElement;
 import com.semenov.deal.model.AdditionalServices;
 import com.semenov.deal.model.CreditStatus;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,11 +25,12 @@ import java.util.List;
 
 
 @Entity
-@Getter
-@Setter
 @ToString
-@NoArgsConstructor
 @Table(name = "credit")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Credit {
 
     @Id
