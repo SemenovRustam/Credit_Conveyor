@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet  author="semenov"  id="1">
+        <createTable tableName="application">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints  nullable="false"  primaryKey="true"/>
+            </column>
+            <column name="client_id" type="INT"/>
+            <column name="credit_id" type="INT"/>
+            <column name="status" type="VARCHAR(25)"/>
+            <column name="creation_date" type="DATE"/>
+            <column name="applied_offer" type="JSONB"/>
+            <column name="sign_date" type="DATE"/>
+            <column name="ses_code" type="INT"/>
+            <column name="status_history" type="JSONB"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

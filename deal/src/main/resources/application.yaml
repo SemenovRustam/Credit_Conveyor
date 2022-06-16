@@ -1,18 +1,18 @@
 spring:
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
   jpa:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   datasource:
     url: jdbc:postgresql://localhost:5432/deal_DB
     username: postgres
     password: superpostgres
     driverClassName: org.postgresql.Driver
-
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-
 server:
-  port: 8091
+  port: 8090

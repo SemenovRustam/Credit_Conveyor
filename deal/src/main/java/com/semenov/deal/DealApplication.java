@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
 
-@EnableFeignClients("com.semenov.deal.client")
+@EnableFeignClients
 @SpringBootApplication
 public class DealApplication {
 

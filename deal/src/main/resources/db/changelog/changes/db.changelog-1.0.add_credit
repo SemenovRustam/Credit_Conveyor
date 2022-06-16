@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet  author="semenov"  id="3">
+        <createTable tableName="credit">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints  nullable="false"  primaryKey="true" />
+            </column>
+            <column name="amount" type="NUMERIC"/>
+            <column name="term" type="INTEGER"/>
+            <column name="monthly_payment" type="NUMERIC"/>
+            <column name="rate" type="NUMERIC"/>
+            <column name="psk" type="NUMERIC"/>
+            <column name="payment_schedule" type="jsonb"/>
+            <column name="additional_service" type="jsonb"/>
+            <column name="credit_status" type="varchar"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
