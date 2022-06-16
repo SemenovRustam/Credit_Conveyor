@@ -10,11 +10,11 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints  nullable="false"  primaryKey="true" />
             </column>
-            <column name="amount" type="BigDecimal"/>
+            <column name="amount" type="NUMERIC"/>
             <column name="term" type="INTEGER"/>
-            <column name="monthly_payment" type="java.math.BigDecimal"/>
-            <column name="rate" type="java.math.BigDecimal"/>
-            <column name="psk" type="java.math.BigDecimal"/>
+            <column name="monthly_payment" type="NUMERIC"/>
+            <column name="rate" type="NUMERIC"/>
+            <column name="psk" type="NUMERIC"/>
             <column name="payment_schedule" type="jsonb"/>
             <column name="additional_service" type="jsonb"/>
             <column name="credit_status" type="varchar"/>
