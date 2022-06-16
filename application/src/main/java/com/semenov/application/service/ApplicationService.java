@@ -49,7 +49,7 @@ public class ApplicationService {
         }
 
         if (loanAppRequest.getMiddleName() != null && !loanAppRequest.getMiddleName().matches("[a-zA-Z]{2,30}")) {
-            listExceptionInfo.add("Incorrect middle");
+            listExceptionInfo.add("Incorrect middle name");
         }
 
         if (age < 18 || age > 60) {
