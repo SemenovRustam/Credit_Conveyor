@@ -45,11 +45,11 @@ public class ApplicationService {
         }
 
         if (!loanAppRequest.getLastName().matches("[a-zA-Z]{2,30}")) {
-            listExceptionInfo.add("Incorrect last name by client");
+            listExceptionInfo.add("Incorrect last name");
         }
 
         if (loanAppRequest.getMiddleName() != null && !loanAppRequest.getMiddleName().matches("[a-zA-Z]{2,30}")) {
-            listExceptionInfo.add("Incorrect middle name by client");
+            listExceptionInfo.add("Incorrect middle");
         }
 
         if (age < 18 || age > 60) {
