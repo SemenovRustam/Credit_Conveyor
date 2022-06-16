@@ -14,6 +14,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<IncorrectData> handlerException(Exception exception) {
         IncorrectData data = new IncorrectData();
         data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
     }
 }
