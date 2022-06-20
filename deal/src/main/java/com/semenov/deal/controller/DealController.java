@@ -4,6 +4,7 @@ import com.semenov.deal.dto.FinishRegistrationRequestDTO;
 import com.semenov.deal.dto.LoanApplicationRequestDTO;
 import com.semenov.deal.dto.LoanOfferDTO;
 import com.semenov.deal.service.DealService;
+import com.semenov.deal.service.MessageService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.util.List;
 public class DealController {
 
     private final DealService dealService;
+    private final MessageService messageService;
 
     @PostMapping("/deal/application")
     @ApiOperation(value = "Получение списка кредитных предложений", notes = "Введите данные, для расчета кредитных предложений")
@@ -36,6 +38,7 @@ public class DealController {
     @ApiOperation(value = "Выбрать и сохранить заявку", notes = "Выберите  заявку")
     public ResponseEntity<Void> applyOffer(@RequestBody LoanOfferDTO loanOfferDTO) {
         dealService.applyOffer(loanOfferDTO);
+        messageService.finishRegistration(loanOfferDTO.getApplicationId());
         return  ResponseEntity.ok().build();
     }
 

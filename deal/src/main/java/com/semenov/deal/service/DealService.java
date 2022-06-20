@@ -42,7 +42,7 @@ public class DealService {
     private final ApplicationRepository applicationRepository;
     private final CreditRepository creditRepository;
     private final ModelMapper mapper;
-    private  final GeneratorUtills generatorUtills;
+    private final GeneratorUtills generatorUtills;
 
     public List<LoanOfferDTO> getLoanOffers(LoanApplicationRequestDTO loanApplicationRequestDTO) {
 
