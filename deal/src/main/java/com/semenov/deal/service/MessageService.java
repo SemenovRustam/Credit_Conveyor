@@ -50,7 +50,7 @@ public class MessageService {
         sendMessageForConsumer(EmailMessageDTO.builder()
                 .address(application.getClient().getEmail())
                 .applicationId(applicationId)
-                .theme(Theme.SEND_DOCUMENTS).build()
+                .theme(Theme.CREATE_DOCUMENTS).build()
         );
     }
 
@@ -58,6 +58,7 @@ public class MessageService {
         log.info("TRY GET APPLICATION BY ID {} ", applicationId);
         Application application = getApplication(applicationId);
         Integer sesCode = createSesCode();
+        kafkaTemplate.send(getTopic(Theme.SEND_SES), sesCode.toString());
 
         log.debug("SET SESCODE {} FOR APPLICATION {} ", sesCode, application);
         application.setSesCode(sesCode);
@@ -69,7 +70,7 @@ public class MessageService {
         sendMessageForConsumer(EmailMessageDTO.builder()
                 .address(application.getClient().getEmail())
                 .applicationId(applicationId)
-                .theme(Theme.SEND_SES)
+                .theme(Theme.SEND_DOCUMENTS)
                 .build());
     }
 
