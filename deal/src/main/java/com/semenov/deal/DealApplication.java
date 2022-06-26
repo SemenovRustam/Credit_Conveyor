@@ -19,4 +19,5 @@ public class DealApplication {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
 }
