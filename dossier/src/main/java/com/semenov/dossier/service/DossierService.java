@@ -4,6 +4,7 @@ package com.semenov.dossier.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,7 +34,7 @@ public class DossierService {
     private List<String> sesCodeList = new ArrayList<>();
 
 
-    @Value("${mail.sender.email}")
+    @Value("${mail.sender}")
     private String senderEmail;
 
     public void sendSes(String receiver) {

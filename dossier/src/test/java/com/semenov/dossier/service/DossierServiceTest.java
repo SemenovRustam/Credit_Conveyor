@@ -31,7 +31,7 @@ public class DossierServiceTest {
 
         dossierService.sendSes(any());
         assertEquals(expectedSes, mailMessage.getText());
-        verify(dossierService, times(1)).sendSes(any());
+        verify(dossierService, times(1)).sendSes(any(String.class));
     }
 
     @Test
@@ -42,9 +42,9 @@ public class DossierServiceTest {
         SimpleMailMessage actualMessage = mock(SimpleMailMessage.class);
         when(actualMessage.getFrom()).thenReturn("testSender");
 
-        dossierService.sendMessage(any(), any());
+        dossierService.sendMessage(any(String.class), any(String.class));
         assertEquals(expectedMessage.getFrom(), actualMessage.getFrom());
-        verify(dossierService, times(1)).sendMessage(any(), any());
+        verify(dossierService, times(1)).sendMessage(any(String.class), any(String.class));
     }
 
     @Test
@@ -53,9 +53,9 @@ public class DossierServiceTest {
         MimeMessage mailMessage = mock(MimeMessage.class);
         when(mailMessage.getContent()).thenReturn(expectedString);
 
-        dossierService.sendDocument(any());
+        dossierService.sendDocument(any(String.class));
 
         assertEquals(expectedString, mailMessage.getContent());
-        verify(dossierService, times(1)).sendDocument(any());
+        verify(dossierService, times(1)).sendDocument(any(String.class));
     }
 }
