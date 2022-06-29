@@ -1,5 +1,9 @@
 package com.semenov.creditconveyor.msconveyor.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.context.annotation.PropertySource;
@@ -50,6 +54,8 @@ public class LoanApplicationRequestDTO {
     @NotNull
     @Past(message = "Date cannot be future")
     @Schema(description = "Дата рождения", example = "2000-01-10")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private final LocalDate birthdate;
 
     @NotNull

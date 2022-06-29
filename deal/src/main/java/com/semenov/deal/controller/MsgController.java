@@ -27,7 +27,7 @@ public class MsgController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(" /deal/document/{applicationId}/code")
+    @PostMapping("/deal/document/{applicationId}/code")
     public ResponseEntity<Void> signDocuments(@PathVariable Long applicationId) {
         messageService.signDocument(applicationId);
         return ResponseEntity.ok().build();

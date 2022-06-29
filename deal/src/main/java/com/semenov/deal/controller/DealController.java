@@ -39,13 +39,13 @@ public class DealController {
     public ResponseEntity<Void> applyOffer(@RequestBody LoanOfferDTO loanOfferDTO) {
         dealService.applyOffer(loanOfferDTO);
         messageService.finishRegistration(loanOfferDTO.getApplicationId());
-        return  ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/deal/calculate/{applicationId}")
     @ApiOperation(value = "Расчет кредита", notes = "Введите данные")
     public ResponseEntity<Void> calculateCredit(@RequestBody FinishRegistrationRequestDTO finishRegistrationRequestDTO, @PathVariable Long applicationId) {
         dealService.calculateCredit(finishRegistrationRequestDTO, applicationId);
-        return  ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 }
