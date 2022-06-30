@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Service
-@PropertySource("classpath:application.properties")
 public class ConveyorServiceImpl implements ConveyorService {
 
     private static final BigDecimal INSURANCE_RATE = BigDecimal.valueOf(0.02);

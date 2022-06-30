@@ -2,11 +2,10 @@ package com.semenov.gateway.client;
 
 
 import com.semenov.gateway.dto.FinishRegistrationRequestDTO;
-import com.semenov.gateway.dto.LoanApplicationRequestDTO;
-import com.semenov.gateway.dto.LoanOfferDTO;
-import io.swagger.annotations.ApiOperation;
+import com.semenov.gateway.entity.Application;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,4 +27,10 @@ public interface DealClient {
 
     @PostMapping("/deal/document/{applicationId}/code")
     void signDocuments(@PathVariable Long applicationId);
+
+    @GetMapping("/deal/admin/application/{applicationId}")
+    Application getApplicationById(@PathVariable Long applicationId);
+
+    @GetMapping("/deal/admin/application")
+    List<Application> getAllApplication();
 }
