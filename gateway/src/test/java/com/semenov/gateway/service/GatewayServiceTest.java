@@ -49,7 +49,6 @@ public class GatewayServiceTest {
     @Test
     public void applyOffer() {
         long expectedAppId = 91L;
-
         LoanOfferDTO offerDTO = LoanOfferDTO.builder()
                 .applicationId(91L)
                 .build();
@@ -62,7 +61,6 @@ public class GatewayServiceTest {
     @Test
     public void calculateCredit() {
         long expectedAppId = 91L;
-
         FinishRegistrationRequestDTO finishRegistrationRequestDTO = FinishRegistrationRequestDTO.builder()
                 .passportIssueDate(LocalDate.now())
                 .build();
