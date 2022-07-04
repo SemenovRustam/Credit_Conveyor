@@ -36,7 +36,7 @@ public class GatewayService{
         log.info("CREDIT CALCULATE SUCCESSFULLY");
     }
 
-    public void send(Long applicationId){
+    public void sendDocumentsRequest(Long applicationId){
         dealClient.sendDocumentsRequest(applicationId);
         log.info("REQUEST DOCUMENT SEND");
     }

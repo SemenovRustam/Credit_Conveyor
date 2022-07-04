@@ -47,7 +47,7 @@ public class GatewayController {
     @PostMapping("/gateway/document/{applicationId}/send")
     @ApiOperation(value = "Запрос на отправку документов", notes = "Отправить документы")
     public ResponseEntity<Void> sendDocumentsRequest(@PathVariable Long applicationId) {
-        gatewayService.send(applicationId);
+        gatewayService.sendDocumentsRequest(applicationId);
         return ResponseEntity.ok().build();
     }
 
