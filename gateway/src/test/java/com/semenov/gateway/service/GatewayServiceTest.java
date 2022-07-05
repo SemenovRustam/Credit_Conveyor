@@ -2,21 +2,24 @@ package com.semenov.gateway.service;
 
 import com.semenov.gateway.client.ConveyorApplicationClient;
 import com.semenov.gateway.client.DealClient;
+import com.semenov.gateway.dto.EmploymentDTO;
 import com.semenov.gateway.dto.FinishRegistrationRequestDTO;
 import com.semenov.gateway.dto.LoanApplicationRequestDTO;
 import com.semenov.gateway.dto.LoanOfferDTO;
+import com.semenov.gateway.model.Gender;
+import com.semenov.gateway.model.MaritalStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,25 +38,60 @@ public class GatewayServiceTest {
 
     @Test
     public void getLoanOffer() {
-        LoanApplicationRequestDTO loanAppMock = mock(LoanApplicationRequestDTO.class);
-        LoanOfferDTO loanOfferMock1 = mock(LoanOfferDTO.class);
-        LoanOfferDTO loanOfferMock2 = mock(LoanOfferDTO.class);
-        List<LoanOfferDTO> listLoanOfferExpected = List.of(loanOfferMock1, loanOfferMock2);
+        LoanApplicationRequestDTO loanAppRequest = LoanApplicationRequestDTO.builder()
+                .amount(BigDecimal.valueOf(10000))
+                .firstName("Vasya")
+                .middleName("Petrovich")
+                .lastName("Ivanov")
+                .term(60)
+                .email("vasya@mail.ru")
+                .birthdate(LocalDate.of(1999, 1, 11))
+                .passportSeries("1234")
+                .passportNumber("123456")
+                .build();
 
-        when(conveyorAppClient.getLoanOffer(loanAppMock)).thenReturn(listLoanOfferExpected);
-        List<LoanOfferDTO> listLoanOfferActual = gatewayService.getLoanOffer(loanAppMock);
+        LoanOfferDTO loanOffer1 = LoanOfferDTO.builder().applicationId(1L)
+                .requestedAmount(BigDecimal.valueOf(100000))
+                .totalAmount(BigDecimal.valueOf(132000))
+                .term(60)
+                .monthlyPayment(BigDecimal.valueOf(2200.00))
+                .rate(BigDecimal.valueOf(6))
+                .isInsuranceEnabled(true)
+                .isSalaryClient(true)
+                .build();
+
+        LoanOfferDTO loanOffer2 = LoanOfferDTO.builder().applicationId(2L)
+                .requestedAmount(BigDecimal.valueOf(100000))
+                .totalAmount(BigDecimal.valueOf(151800))
+                .term(60)
+                .monthlyPayment(BigDecimal.valueOf(2530.00))
+                .rate(BigDecimal.valueOf(10))
+                .isInsuranceEnabled(true)
+                .isSalaryClient(false)
+                .build();
+
+        List<LoanOfferDTO> listLoanOfferExpected = List.of(loanOffer1, loanOffer2);
+
+        when(conveyorAppClient.getLoanOffer(loanAppRequest)).thenReturn(listLoanOfferExpected);
+        List<LoanOfferDTO> listLoanOfferActual = gatewayService.getLoanOffer(loanAppRequest);
 
         assertEquals(listLoanOfferExpected, listLoanOfferActual);
     }
 
     @Test
     public void applyOffer() {
-        long expectedAppId = 91L;
-        LoanOfferDTO offerDTO = LoanOfferDTO.builder()
-                .applicationId(91L)
+        long expectedAppId = 1L;
+        LoanOfferDTO loanOffer = LoanOfferDTO.builder().applicationId(1L)
+                .requestedAmount(BigDecimal.valueOf(100000))
+                .totalAmount(BigDecimal.valueOf(132000))
+                .term(60)
+                .monthlyPayment(BigDecimal.valueOf(2200.00))
+                .rate(BigDecimal.valueOf(6))
+                .isInsuranceEnabled(true)
+                .isSalaryClient(true)
                 .build();
 
-        gatewayService.applyOffer(offerDTO);
+        gatewayService.applyOffer(loanOffer);
 
         verify(conveyorAppClient, times(1)).applyOffer(argThat(offer -> offer.getApplicationId().equals(expectedAppId)));
     }
@@ -62,6 +100,12 @@ public class GatewayServiceTest {
     public void calculateCredit() {
         long expectedAppId = 91L;
         FinishRegistrationRequestDTO finishRegistrationRequestDTO = FinishRegistrationRequestDTO.builder()
+                .account("account")
+                .employmentDTO(new EmploymentDTO())
+                .dependentAmount(1)
+                .maritalStatus(MaritalStatus.MARRIED)
+                .gender(Gender.MALE)
+                .passportIssueBranch("1344")
                 .passportIssueDate(LocalDate.now())
                 .build();
 

@@ -2,6 +2,7 @@ package com.semenov.dossier.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.SimpleMailMessage;
@@ -23,15 +24,16 @@ public class DossierServiceTest {
     @Mock
     private DossierService dossierService;
 
+
     @Test
     public void sendSes() {
         String expectedSes = "1923";
         SimpleMailMessage mailMessage = mock(SimpleMailMessage.class);
         when(mailMessage.getText()).thenReturn("1923");
 
-        dossierService.sendSes(any());
+        dossierService.sendSes(any(String.class));
         assertEquals(expectedSes, mailMessage.getText());
-        verify(dossierService, times(1)).sendSes(any(String.class));
+        verify(dossierService, times(1)).sendSes(any());
     }
 
     @Test
@@ -44,7 +46,7 @@ public class DossierServiceTest {
 
         dossierService.sendMessage(any(String.class), any(String.class));
         assertEquals(expectedMessage.getFrom(), actualMessage.getFrom());
-        verify(dossierService, times(1)).sendMessage(any(String.class), any(String.class));
+        verify(dossierService, times(1)).sendMessage(any(), any());
     }
 
     @Test
@@ -56,6 +58,6 @@ public class DossierServiceTest {
         dossierService.sendDocument(any(String.class));
 
         assertEquals(expectedString, mailMessage.getContent());
-        verify(dossierService, times(1)).sendDocument(any(String.class));
+        verify(dossierService, times(1)).sendDocument(any());
     }
 }
