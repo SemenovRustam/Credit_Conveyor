@@ -37,7 +37,7 @@ public class MessageService {
         log.debug("FINISH REGISTRATION MESSAGE SEND FOR CLIENT");
     }
 
-    public void send(Long applicationId) {
+    public void sendDocumentsRequest(Long applicationId) {
         log.debug("TRY GET APPLICATION BY ID {} ", applicationId);
         Application application = getApplication(applicationId);
         log.debug("UPDATE APPLICATION STATUS");
@@ -60,7 +60,7 @@ public class MessageService {
         Integer sesCode = createSesCode();
         kafkaTemplate.send(getTopic(Theme.SEND_SES), sesCode.toString());
 
-        log.debug("SET SESCODE {} FOR APPLICATION {} ", sesCode, application);
+        log.debug("SET SES CODE {} FOR APPLICATION {} ", sesCode, application);
         application.setSesCode(sesCode);
         application.setStatus(Status.DOCUMENT_SIGNED);
         log.debug("UPDATE APPLICATION IN DB");

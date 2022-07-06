@@ -1,6 +1,5 @@
 package com.semenov.gateway.controller;
 
-import com.semenov.gateway.client.DealClient;
 import com.semenov.gateway.entity.Application;
 import com.semenov.gateway.service.AdminService;
 import io.swagger.annotations.ApiOperation;

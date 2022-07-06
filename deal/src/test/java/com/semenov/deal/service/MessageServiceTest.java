@@ -30,9 +30,9 @@ public class MessageServiceTest {
 
     @Test
     public void send() {
-        messageService.send(anyLong());
+        messageService.sendDocumentsRequest(anyLong());
 
-        verify(messageService, times(1)).send(anyLong());
+        verify(messageService, times(1)).sendDocumentsRequest(anyLong());
     }
 
     @Test

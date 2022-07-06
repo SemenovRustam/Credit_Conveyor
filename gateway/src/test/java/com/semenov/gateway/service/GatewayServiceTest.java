@@ -93,7 +93,9 @@ public class GatewayServiceTest {
 
         gatewayService.applyOffer(loanOffer);
 
-        verify(conveyorAppClient, times(1)).applyOffer(argThat(offer -> offer.getApplicationId().equals(expectedAppId)));
+        verify(conveyorAppClient, times(1)).applyOffer(
+                argThat(offer -> offer.getApplicationId().equals(expectedAppId))
+        );
     }
 
     @Test

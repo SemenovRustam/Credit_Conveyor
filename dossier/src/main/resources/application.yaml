@@ -3,7 +3,19 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   kafka:
-    bootstrap-servers: localhost:9092
+    consumer:
+      bootstrap-servers: localhost:9092
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    topic:
+      finish-registration: finish-registration
+      create-documents: create-documents
+      send-documents: send-documents
+      send-ses: send-ses
+      credit-issued: credit-issued
+      application-denied: application-denied
+
   mail:
     host: smtp.yandex.com
     port: 587
