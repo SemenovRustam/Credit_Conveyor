@@ -1,5 +1,6 @@
 package com.semenov.deal.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.semenov.deal.client.ConveyorApplicationClient;
 import com.semenov.deal.dto.CreditDTO;
 import com.semenov.deal.dto.FinishRegistrationRequestDTO;
@@ -15,7 +16,6 @@ import com.semenov.deal.model.AdditionalServices;
 import com.semenov.deal.model.ApplicationHistory;
 import com.semenov.deal.model.CreditStatus;
 import com.semenov.deal.model.Employment;
-import com.semenov.deal.model.Passport;
 import com.semenov.deal.model.Status;
 import com.semenov.deal.repository.ApplicationRepository;
 import com.semenov.deal.repository.ClientRepository;
@@ -43,6 +43,7 @@ public class DealService {
     private final CreditRepository creditRepository;
     private final ModelMapper mapper;
     private final GeneratorUtills generatorUtills;
+
 
     public List<LoanOfferDTO> getLoanOffers(LoanApplicationRequestDTO loanApplicationRequestDTO) {
 

@@ -1,6 +1,8 @@
 package com.semenov.deal.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.semenov.deal.dto.EmailMessageDTO;
 import com.semenov.deal.entity.Application;
 import com.semenov.deal.entity.Credit;
@@ -16,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-
 import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,6 +30,7 @@ public class MessageService {
     private final ApplicationRepository applicationRepository;
     private final CreditRepository creditRepository;
     private int actualSescode;
+    private final ObjectMapper objectMapper;
 
     public void finishRegistration(Long applicationId) {
         Application application = getApplication(applicationId);
@@ -113,7 +115,7 @@ public class MessageService {
         updateStatusHistory(application, Status.CREDIT_ISSUED);
         credit.setCreditStatus(CreditStatus.ISSUED);
         creditRepository.save(credit);
-        log.info("UPDATE CREDIT {} IN DATABASE" , credit);
+        log.info("UPDATE CREDIT {} IN DATABASE", credit);
     }
 
     private void updateStatusHistory(Application application, Status status) {
@@ -134,7 +136,13 @@ public class MessageService {
 
     private void sendMessageForConsumer(EmailMessageDTO messageDTO) {
         String topic = getTopic(messageDTO.getTheme());
-        kafkaTemplate.send(topic, messageDTO.toString());
+        try {
+            String jsonEmailDTO = objectMapper.writeValueAsString(messageDTO);
+            kafkaTemplate.send(topic, jsonEmailDTO);
+            log.info("kafka send message for consumer with topic {}", topic);
+        } catch (JsonProcessingException e) {
+            log.warn(e.getMessage());
+        }
     }
 
     private String getTopic(Theme theme) {

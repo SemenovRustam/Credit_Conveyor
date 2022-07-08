@@ -1,6 +1,9 @@
 package com.semenov.dossier.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.semenov.dossier.dto.EmailMessageDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +30,8 @@ public class DossierService {
     private final JavaMailSender javaMailSender;
     private String sesCode;
     private String filename;
+    private final ObjectMapper objectMapper;
+
 
     @Value("${mail.sender}")
     private String senderEmail;
@@ -82,27 +87,13 @@ public class DossierService {
             , "application-denied"}
             , groupId = "deal")
     private void listener(String data) {
-        String theme = null;
-        if (data.contains("FINISH_REGISTRATION")) {
-            theme = "FINISH_REGISTRATION";
+        try {
+            EmailMessageDTO emailMessageDTO = objectMapper.readValue(data, EmailMessageDTO.class);
+            filename = emailMessageDTO.getTheme().toString();
+            log.info("consumer received the message with topic {}", filename);
+        } catch (JsonProcessingException e) {
+            log.warn(e.getMessage());
         }
-        if (data.contains("CREATE_DOCUMENTS")) {
-            theme = "CREATE_DOCUMENTS";
-        }
-        if (data.contains("SEND_DOCUMENTS")) {
-            theme = "SEND_DOCUMENTS";
-        }
-        if (data.contains("SEND_SES")) {
-            theme = "SEND_SES";
-        }
-        if (data.contains("CREDIT_ISSUED")) {
-            theme = "CREDIT_ISSUED";
-        }
-        if (data.contains("APPLICATION_DENIED")) {
-            theme = "APPLICATION_DENIED";
-        }
-        System.out.println(theme);
-        filename = theme;
     }
 
 
