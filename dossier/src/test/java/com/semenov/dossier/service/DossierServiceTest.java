@@ -6,13 +6,16 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import javax.mail.Address;
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.Objects;
@@ -34,6 +37,7 @@ public class DossierServiceTest {
 
     @InjectMocks
     private DossierService dossierService;
+
 
     @Test
     public void sendSes() {
@@ -59,22 +63,23 @@ public class DossierServiceTest {
         );
     }
 
+
     @Test
     public void sendDocument() throws MessagingException {
         String receiver = "mail@mail.ru";
+        MimeMessage message = new MimeMessage((Session) null);
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+        mimeMessageHelper.setTo(receiver);
 
-
-        MimeMessage mimeMessage = mock(MimeMessage.class);
-        when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
+        when(javaMailSender.createMimeMessage()).thenReturn(message);
 
         dossierService.sendDocument(receiver);
 
-//        verify(javaMailSender, times(1)).createMimeMessage();
-
-        verify(javaMailSender, times(2)).send(
-                argThat((MimeMessage message) -> {
+        verify(javaMailSender, times(1)).createMimeMessage();
+        verify(javaMailSender, times(1)).send(
+                argThat((MimeMessage mm) -> {
                     try {
-                        return Objects.equals(message.getFrom()[0].toString(), receiver);
+                        return mm.getAllRecipients()[0].toString().equals(receiver);
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }

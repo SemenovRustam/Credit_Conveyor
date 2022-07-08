@@ -32,8 +32,8 @@ public class MsgController {
 
     @PostMapping("/deal/document/{applicationId}/code")
     @ApiOperation(value = "Подписание документов")
-    public ResponseEntity<Void> signDocuments(@PathVariable Long applicationId) {
-        messageService.signDocument(applicationId);
+    public ResponseEntity<Void> signDocuments(@PathVariable Long applicationId, Integer sescode) {
+        messageService.signDocument(applicationId, sescode);
         return ResponseEntity.ok().build();
     }
 }

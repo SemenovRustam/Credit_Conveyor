@@ -8,13 +8,6 @@ spring:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    topic:
-      finish-registration: finish-registration
-      create-documents: create-documents
-      send-documents: send-documents
-      send-ses: send-ses
-      credit-issued: credit-issued
-      application-denied: application-denied
 
   mail:
     host: smtp.yandex.com
@@ -27,7 +20,8 @@ spring:
       starttls.enable: true
       ssl.trust: smtp.yandex.com
 
-mail.sender: zeevvsss@yandex.ru
+mail:
+  sender: zeevvsss@yandex.ru
 
 server:
   port: 8081

@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.kafka.core.KafkaTemplate;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,8 +45,8 @@ public class MessageServiceTest {
 
     @Test
     public void signDocument() {
-        messageService.signDocument(anyLong());
+        messageService.signDocument(anyLong(), anyInt());
 
-        verify(messageService, times(1)).signDocument(anyLong());
+        verify(messageService, times(1)).signDocument(anyLong(), anyInt());
     }
 }

@@ -1,5 +1,6 @@
 package com.semenov.deal.service;
 
+
 import com.semenov.deal.dto.EmailMessageDTO;
 import com.semenov.deal.entity.Application;
 import com.semenov.deal.entity.Credit;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -26,6 +28,7 @@ public class MessageService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ApplicationRepository applicationRepository;
     private final CreditRepository creditRepository;
+    private int actualSescode;
 
     public void finishRegistration(Long applicationId) {
         Application application = getApplication(applicationId);
@@ -38,7 +41,7 @@ public class MessageService {
     }
 
     public void sendDocumentsRequest(Long applicationId) {
-        log.debug("TRY GET APPLICATION BY ID {} ", applicationId);
+        log.debug("TRY GET APPLICATION BY ID {}", applicationId);
         Application application = getApplication(applicationId);
         log.debug("UPDATE APPLICATION STATUS");
         application.setStatus(Status.PREPARE_DOCUMENTS);
@@ -58,6 +61,7 @@ public class MessageService {
         log.info("TRY GET APPLICATION BY ID {} ", applicationId);
         Application application = getApplication(applicationId);
         Integer sesCode = createSesCode();
+        actualSescode = sesCode;
         kafkaTemplate.send(getTopic(Theme.SEND_SES), sesCode.toString());
 
         log.debug("SET SES CODE {} FOR APPLICATION {} ", sesCode, application);
@@ -74,7 +78,11 @@ public class MessageService {
                 .build());
     }
 
-    public void signDocument(Long applicationId) {
+    public void signDocument(Long applicationId, Integer clientSesCode) {
+        if (!clientSesCode.equals(actualSescode)) {
+            log.warn("the entered sescode is not correct!");
+            throw new DealAppException("the entered sescode is not correct!");
+        }
         log.debug("TRY GET APPLICATION BY ID {} ", applicationId);
         Application application = getApplication(applicationId);
         application.setStatus(Status.DOCUMENT_SIGNED);
@@ -95,17 +103,17 @@ public class MessageService {
 
     private void issueCredit(Application application) {
         if (application.getCredit() == null) {
-            log.info("\"credit  is not exists\"");
+            log.info("credit  is not exists");
             throw new DealAppException("credit  is not exists");
         }
         Long creditId = application.getCredit().getId();
-        Credit credit = creditRepository.findById(creditId).get();
+        Credit credit = creditRepository.findById(creditId).orElseThrow(() -> new DealAppException("Can`t find credit by Id."));
 
         application.setStatus(Status.CREDIT_ISSUED);
         updateStatusHistory(application, Status.CREDIT_ISSUED);
         credit.setCreditStatus(CreditStatus.ISSUED);
         creditRepository.save(credit);
-        log.info("UPDATE CREDIT {} IN DATABASE");
+        log.info("UPDATE CREDIT {} IN DATABASE" , credit);
     }
 
     private void updateStatusHistory(Application application, Status status) {

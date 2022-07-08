@@ -27,25 +27,18 @@ import java.util.List;
 public class DossierService {
 
     private final JavaMailSender javaMailSender;
-    private List<String> list = new ArrayList<>();
-    private int docCount;
-    private int sesCodeCount;
-    private List<String> sesCodeList = new ArrayList<>();
-
+    private String sesCode;
+    private String filename;
 
     @Value("${mail.sender}")
     private String senderEmail;
 
     public void sendSes(String receiver) {
-        if (sesCodeList.isEmpty()) {
-            sesCodeList.add("9865");
-            sesCodeCount++;
-        }
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(senderEmail);
         message.setTo(receiver);
         message.setSubject("Ses code");
-        message.setText(sesCodeList.get(sesCodeCount - 1));
+        message.setText(sesCode);
         javaMailSender.send(message);
         log.info("message send");
     }
@@ -65,15 +58,15 @@ public class DossierService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true);
             mimeMessageHelper.setTo(receiver);
-            mimeMessageHelper.setFrom(new InternetAddress(senderEmail, "senderText"));
+            mimeMessageHelper.setFrom(new InternetAddress(senderEmail, senderEmail));
 
             message.setSubject("Оформление кредита");
             Multipart multipart = new MimeMultipart();
             MimeBodyPart fileBodyPart = new MimeBodyPart();
 
-            DataSource fileDataSource = new FileDataSource("dossier/src/main/resources/documents/" + list.get(docCount - 1));
+            DataSource fileDataSource = new FileDataSource("dossier/src/main/resources/documents/" + filename);
             fileBodyPart.setDataHandler(new DataHandler(fileDataSource));
-            fileBodyPart.setFileName(list.get(docCount - 1) + ".txt");
+            fileBodyPart.setFileName(filename + ".txt");
             multipart.addBodyPart(fileBodyPart);
 
             message.setContent(multipart);
@@ -94,37 +87,30 @@ public class DossierService {
         String theme = null;
         if (data.contains("FINISH_REGISTRATION")) {
             theme = "FINISH_REGISTRATION";
-            docCount++;
         }
         if (data.contains("CREATE_DOCUMENTS")) {
             theme = "CREATE_DOCUMENTS";
-            docCount++;
         }
         if (data.contains("SEND_DOCUMENTS")) {
             theme = "SEND_DOCUMENTS";
-            docCount++;
         }
         if (data.contains("SEND_SES")) {
             theme = "SEND_SES";
-            docCount++;
         }
         if (data.contains("CREDIT_ISSUED")) {
             theme = "CREDIT_ISSUED";
-            docCount++;
         }
         if (data.contains("APPLICATION_DENIED")) {
             theme = "APPLICATION_DENIED";
-            docCount++;
         }
         System.out.println(theme);
-        list.add(theme);
+        filename = theme;
     }
 
 
     @KafkaListener(topics = "send-ses", groupId = "deal")
     private void getSesCode(String data) {
         System.out.println("Ses code = " + data);
-        sesCodeList.add(data);
-        sesCodeCount++;
+        sesCode = data;
     }
 }
