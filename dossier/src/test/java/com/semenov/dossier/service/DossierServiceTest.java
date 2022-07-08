@@ -65,14 +65,11 @@ public class DossierServiceTest {
 
 
     @Test
-    public void sendDocument() throws MessagingException {
+    public void sendDocument() {
         String receiver = "mail@mail.ru";
         MimeMessage message = new MimeMessage((Session) null);
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
-        mimeMessageHelper.setTo(receiver);
 
         when(javaMailSender.createMimeMessage()).thenReturn(message);
-
         dossierService.sendDocument(receiver);
 
         verify(javaMailSender, times(1)).createMimeMessage();
