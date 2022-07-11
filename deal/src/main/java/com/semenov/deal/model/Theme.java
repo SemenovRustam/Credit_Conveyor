@@ -1,5 +1,10 @@
 package com.semenov.deal.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Getter
 public enum Theme {
     FINISH_REGISTRATION,
     CREATE_DOCUMENTS,

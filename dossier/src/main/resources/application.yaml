@@ -3,7 +3,12 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   kafka:
-    bootstrap-servers: localhost:9092
+    consumer:
+      bootstrap-servers: localhost:9092
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
   mail:
     host: smtp.yandex.com
     port: 587
@@ -15,7 +20,8 @@ spring:
       starttls.enable: true
       ssl.trust: smtp.yandex.com
 
-mail.sender: zeevvsss@yandex.ru
+mail:
+  sender: zeevvsss@yandex.ru
 
 server:
   port: 8081

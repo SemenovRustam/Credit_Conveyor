@@ -1,10 +1,12 @@
 package com.semenov.dossier.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.semenov.dossier.dto.EmailMessageDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,8 +21,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -28,10 +28,9 @@ import java.util.List;
 public class DossierService {
 
     private final JavaMailSender javaMailSender;
-    private List<String> list = new ArrayList<>();
-    private int docCount;
-    private int sesCodeCount;
-    private List<String> sesCodeList = new ArrayList<>();
+    private String sesCode;
+    private String filename;
+    private final ObjectMapper objectMapper;
 
 
     @Value("${mail.sender}")
@@ -42,11 +41,10 @@ public class DossierService {
         message.setFrom(senderEmail);
         message.setTo(receiver);
         message.setSubject("Ses code");
-        message.setText(sesCodeList.get(sesCodeCount - 1));
+        message.setText(sesCode);
         javaMailSender.send(message);
         log.info("message send");
     }
-
 
     public void sendMessage(String receiver, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -63,15 +61,15 @@ public class DossierService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true);
             mimeMessageHelper.setTo(receiver);
-            mimeMessageHelper.setFrom(new InternetAddress(senderEmail, "senderText"));
+            mimeMessageHelper.setFrom(new InternetAddress(senderEmail, senderEmail));
 
             message.setSubject("Оформление кредита");
             Multipart multipart = new MimeMultipart();
             MimeBodyPart fileBodyPart = new MimeBodyPart();
 
-            DataSource fileDataSource = new FileDataSource("dossier/src/main/resources/documents/" + list.get(docCount - 1));
+            DataSource fileDataSource = new FileDataSource("dossier/src/main/resources/documents/" + filename);
             fileBodyPart.setDataHandler(new DataHandler(fileDataSource));
-            fileBodyPart.setFileName(list.get(docCount - 1) + ".txt");
+            fileBodyPart.setFileName(filename + ".txt");
             multipart.addBodyPart(fileBodyPart);
 
             message.setContent(multipart);
@@ -89,40 +87,19 @@ public class DossierService {
             , "application-denied"}
             , groupId = "deal")
     private void listener(String data) {
-        String theme = null;
-        if (data.contains("FINISH_REGISTRATION")) {
-            theme = "FINISH_REGISTRATION";
-            docCount++;
+        try {
+            EmailMessageDTO emailMessageDTO = objectMapper.readValue(data, EmailMessageDTO.class);
+            filename = emailMessageDTO.getTheme().toString();
+            log.info("consumer received the message with topic {}", filename);
+        } catch (JsonProcessingException e) {
+            log.warn(e.getMessage());
         }
-        if (data.contains("CREATE_DOCUMENTS")) {
-            theme = "CREATE_DOCUMENTS";
-            docCount++;
-        }
-        if (data.contains("SEND_DOCUMENTS")) {
-            theme = "SEND_DOCUMENTS";
-            docCount++;
-        }
-        if (data.contains("SEND_SES")) {
-            theme = "SEND_SES";
-            docCount++;
-        }
-        if (data.contains("CREDIT_ISSUED")) {
-            theme = "CREDIT_ISSUED";
-            docCount++;
-        }
-        if (data.contains("APPLICATION_DENIED")) {
-            theme = "APPLICATION_DENIED";
-            docCount++;
-        }
-        System.out.println(theme);
-        list.add(theme);
     }
 
 
     @KafkaListener(topics = "send-ses", groupId = "deal")
     private void getSesCode(String data) {
         System.out.println("Ses code = " + data);
-        sesCodeList.add(data);
-        sesCodeCount++;
+        sesCode = data;
     }
 }

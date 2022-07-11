@@ -1,5 +1,8 @@
 package com.semenov.deal.service;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.semenov.deal.dto.EmailMessageDTO;
 import com.semenov.deal.entity.Application;
 import com.semenov.deal.entity.Credit;
@@ -26,6 +29,8 @@ public class MessageService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ApplicationRepository applicationRepository;
     private final CreditRepository creditRepository;
+    private int actualSescode;
+    private final ObjectMapper objectMapper;
 
     public void finishRegistration(Long applicationId) {
         Application application = getApplication(applicationId);
@@ -37,8 +42,8 @@ public class MessageService {
         log.debug("FINISH REGISTRATION MESSAGE SEND FOR CLIENT");
     }
 
-    public void send(Long applicationId) {
-        log.debug("TRY GET APPLICATION BY ID {} ", applicationId);
+    public void sendDocumentsRequest(Long applicationId) {
+        log.debug("TRY GET APPLICATION BY ID {}", applicationId);
         Application application = getApplication(applicationId);
         log.debug("UPDATE APPLICATION STATUS");
         application.setStatus(Status.PREPARE_DOCUMENTS);
@@ -58,9 +63,10 @@ public class MessageService {
         log.info("TRY GET APPLICATION BY ID {} ", applicationId);
         Application application = getApplication(applicationId);
         Integer sesCode = createSesCode();
+        actualSescode = sesCode;
         kafkaTemplate.send(getTopic(Theme.SEND_SES), sesCode.toString());
 
-        log.debug("SET SESCODE {} FOR APPLICATION {} ", sesCode, application);
+        log.debug("SET SES CODE {} FOR APPLICATION {} ", sesCode, application);
         application.setSesCode(sesCode);
         application.setStatus(Status.DOCUMENT_SIGNED);
         log.debug("UPDATE APPLICATION IN DB");
@@ -74,7 +80,11 @@ public class MessageService {
                 .build());
     }
 
-    public void signDocument(Long applicationId) {
+    public void signDocument(Long applicationId, Integer clientSesCode) {
+        if (!clientSesCode.equals(actualSescode)) {
+            log.warn("the entered sescode is not correct!");
+            throw new DealAppException("the entered sescode is not correct!");
+        }
         log.debug("TRY GET APPLICATION BY ID {} ", applicationId);
         Application application = getApplication(applicationId);
         application.setStatus(Status.DOCUMENT_SIGNED);
@@ -95,17 +105,17 @@ public class MessageService {
 
     private void issueCredit(Application application) {
         if (application.getCredit() == null) {
-            log.info("\"credit  is not exists\"");
+            log.info("credit  is not exists");
             throw new DealAppException("credit  is not exists");
         }
         Long creditId = application.getCredit().getId();
-        Credit credit = creditRepository.findById(creditId).get();
+        Credit credit = creditRepository.findById(creditId).orElseThrow(() -> new DealAppException("Can`t find credit by Id."));
 
         application.setStatus(Status.CREDIT_ISSUED);
         updateStatusHistory(application, Status.CREDIT_ISSUED);
         credit.setCreditStatus(CreditStatus.ISSUED);
         creditRepository.save(credit);
-        log.info("UPDATE CREDIT {} IN DATABASE");
+        log.info("UPDATE CREDIT {} IN DATABASE", credit);
     }
 
     private void updateStatusHistory(Application application, Status status) {
@@ -126,7 +136,13 @@ public class MessageService {
 
     private void sendMessageForConsumer(EmailMessageDTO messageDTO) {
         String topic = getTopic(messageDTO.getTheme());
-        kafkaTemplate.send(topic, messageDTO.toString());
+        try {
+            String jsonEmailDTO = objectMapper.writeValueAsString(messageDTO);
+            kafkaTemplate.send(topic, jsonEmailDTO);
+            log.info("kafka send message for consumer with topic {}", topic);
+        } catch (JsonProcessingException e) {
+            log.warn(e.getMessage());
+        }
     }
 
     private String getTopic(Theme theme) {

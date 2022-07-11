@@ -1,5 +1,9 @@
 package com.semenov.creditconveyor.msconveyor.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -45,6 +49,8 @@ public class ScoringDataDTO {
 
     @NotNull
     @Schema(description = "Дата рождения", example = "2000-01-10")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private final LocalDate birthdate;
 
     @NotNull
@@ -59,6 +65,8 @@ public class ScoringDataDTO {
 
     @NotNull
     @Schema(description = "Дата выдачи паспорта", example = "2000-01-10")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private final LocalDate passportIssueDate;
 
     @NotNull
