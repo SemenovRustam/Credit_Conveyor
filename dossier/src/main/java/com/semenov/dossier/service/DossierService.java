@@ -99,7 +99,7 @@ public class DossierService {
 
     @KafkaListener(topics = "send-ses", groupId = "deal")
     private void getSesCode(String data) {
-        System.out.println("Ses code = " + data);
+        log.info("Ses code = " + data);
         sesCode = data;
     }
 }

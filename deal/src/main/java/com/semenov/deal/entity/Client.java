@@ -1,5 +1,6 @@
 package com.semenov.deal.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.semenov.deal.model.Employment;
 import com.semenov.deal.model.Gender;
 import com.semenov.deal.model.MaritalStatus;
@@ -86,5 +87,6 @@ public class Client {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
+    @JsonIgnore
     private Application application;
 }

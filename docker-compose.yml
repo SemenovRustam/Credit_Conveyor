@@ -16,7 +16,7 @@ services:
     links:
       - zookeeper:zookeeper
     environment:
-      HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
+      KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
   application:
@@ -36,6 +36,8 @@ services:
     build: dossier
     ports:
     - 8081:8081
+    depends_on:
+      - kafka
 
   gateway:
     container_name: gateway
@@ -59,6 +61,7 @@ services:
     - 8090:8090
     depends_on:
       - PostgreSQL
+      - kafka
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres

@@ -1,5 +1,6 @@
 package com.semenov.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.semenov.application.Application;
 import com.semenov.application.model.Employment;
 import com.semenov.application.model.Gender;
