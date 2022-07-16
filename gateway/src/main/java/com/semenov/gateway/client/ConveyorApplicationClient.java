@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "conveyor-application-client", url = "http://localhost:8088/api")
+@FeignClient(name = "conveyor-application-client", url = "http://application:8088/api")
 public interface ConveyorApplicationClient {
 
     @PutMapping("/application/offer")
