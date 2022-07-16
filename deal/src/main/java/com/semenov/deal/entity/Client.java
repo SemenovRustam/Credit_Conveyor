@@ -1,5 +1,6 @@
 package com.semenov.deal.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.semenov.deal.model.Employment;
 import com.semenov.deal.model.Gender;
@@ -9,7 +10,9 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -87,6 +90,7 @@ public class Client {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
-    @JsonIgnore
+    @JsonBackReference
+    @ToString.Exclude
     private Application application;
 }
