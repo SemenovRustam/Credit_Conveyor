@@ -4,9 +4,6 @@ spring:
       matching-strategy: ant_path_matcher
   kafka:
     consumer:
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       bootstrap-servers: kafka:9092
 
   mail:

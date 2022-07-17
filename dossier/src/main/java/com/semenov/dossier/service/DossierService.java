@@ -21,6 +21,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,7 +32,6 @@ import javax.mail.internet.MimeMultipart;
 public class DossierService {
 
     private final JavaMailSender javaMailSender;
-    private String sesCode;
     private String filename;
     private final ObjectMapper objectMapper;
 
@@ -36,7 +39,7 @@ public class DossierService {
     @Value("${mail.sender}")
     private String senderEmail;
 
-    public void sendSes(String receiver) {
+    public void sendSes(String receiver, String sesCode) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(senderEmail);
         message.setTo(receiver);
@@ -56,7 +59,7 @@ public class DossierService {
         log.info("message send");
     }
 
-    public void sendDocument(String receiver) {
+    public void sendDocument(String receiver,File file ) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true);
@@ -67,7 +70,7 @@ public class DossierService {
             Multipart multipart = new MimeMultipart();
             MimeBodyPart fileBodyPart = new MimeBodyPart();
 
-            DataSource fileDataSource = new FileDataSource("dossier/src/main/resources/documents/" + filename);
+            DataSource fileDataSource = new FileDataSource(file);
             fileBodyPart.setDataHandler(new DataHandler(fileDataSource));
             fileBodyPart.setFileName(filename + ".txt");
             multipart.addBodyPart(fileBodyPart);
@@ -80,26 +83,5 @@ public class DossierService {
         }
     }
 
-    @KafkaListener(topics = {"finish-registration"
-            , "create-documents"
-            , "send-documents"
-            , "credit-issued"
-            , "application-denied"}
-            , groupId = "deal")
-    private void listener(String data) {
-        try {
-            EmailMessageDTO emailMessageDTO = objectMapper.readValue(data, EmailMessageDTO.class);
-            filename = emailMessageDTO.getTheme().toString();
-            log.info("consumer received the message with topic {}", filename);
-        } catch (JsonProcessingException e) {
-            log.warn(e.getMessage());
-        }
-    }
 
-
-    @KafkaListener(topics = "send-ses", groupId = "deal")
-    private void getSesCode(String data) {
-        log.info("Ses code = " + data);
-        sesCode = data;
-    }
 }

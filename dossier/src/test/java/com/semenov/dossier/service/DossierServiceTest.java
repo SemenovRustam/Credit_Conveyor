@@ -17,6 +17,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -41,9 +42,10 @@ public class DossierServiceTest {
 
     @Test
     public void sendSes() {
+        String sesCode = "1234";
         String receiver = "mail@mail.ru";
 
-        dossierService.sendSes(receiver);
+        dossierService.sendSes(receiver, sesCode);
 
         verify(javaMailSender, times(1)).send(
                 argThat((SimpleMailMessage smm) -> Objects.requireNonNull(smm.getTo())[0].equals(receiver))
@@ -68,9 +70,10 @@ public class DossierServiceTest {
     public void sendDocument() {
         String receiver = "mail@mail.ru";
         MimeMessage message = new MimeMessage((Session) null);
+        File file = new File("some.txt");
 
         when(javaMailSender.createMimeMessage()).thenReturn(message);
-        dossierService.sendDocument(receiver);
+        dossierService.sendDocument(receiver, file);
 
         verify(javaMailSender, times(1)).createMimeMessage();
         verify(javaMailSender, times(1)).send(

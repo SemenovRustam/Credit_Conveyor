@@ -21,15 +21,15 @@ public class DossierController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/send/doc")
-    public ResponseEntity<Void> sendMessageWithDoc(@RequestParam String receiver) {
-        dossierService.sendDocument(receiver);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/send/doc")
+//    public ResponseEntity<Void> sendMessageWithDoc(@RequestParam String receiver) {
+//        dossierService.sendDocument(receiver);
+//        return ResponseEntity.ok().build();
+//    }
 
-    @PostMapping("/send/ses")
-    public ResponseEntity<Void> sendSesCode(@RequestParam String receiver) {
-        dossierService.sendSes(receiver);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/send/ses")
+//    public ResponseEntity<Void> sendSesCode(@RequestParam String receiver) {
+//        dossierService.sendSes(receiver);
+//        return ResponseEntity.ok().build();
+//    }
 }

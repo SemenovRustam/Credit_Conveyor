@@ -16,6 +16,7 @@ import com.semenov.deal.model.AdditionalServices;
 import com.semenov.deal.model.ApplicationHistory;
 import com.semenov.deal.model.CreditStatus;
 import com.semenov.deal.model.Employment;
+import com.semenov.deal.model.Passport;
 import com.semenov.deal.model.Status;
 import com.semenov.deal.repository.ApplicationRepository;
 import com.semenov.deal.repository.ClientRepository;
@@ -147,6 +148,13 @@ public class DealService {
         client.setDependentAmount(finishRegistrationRequestDTO.getDependentAmount());
         client.setEmployment(employment);
         client.setAccount(finishRegistrationRequestDTO.getAccount());
+
+        Passport passport = client.getPassport();
+        passport.setIssueDate(finishRegistrationRequestDTO.getPassportIssueDate());
+        passport.setIssueBranch(finishRegistrationRequestDTO.getPassportIssueBranch());
+
+        client.setPassport(passport);
+        log.info("UPDATE PASSPORT CLIENT IN APPLICATION");
         return client;
     }
 
