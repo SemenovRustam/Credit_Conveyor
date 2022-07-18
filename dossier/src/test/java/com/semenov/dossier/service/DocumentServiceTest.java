@@ -1,9 +1,5 @@
 package com.semenov.dossier.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.semenov.dossier.client.DealClient;
-import com.semenov.dossier.dto.EmailMessageDTO;
 import com.semenov.dossier.dto.LoanOfferDTO;
 import com.semenov.dossier.entity.Application;
 import com.semenov.dossier.entity.Client;
@@ -15,48 +11,29 @@ import com.semenov.dossier.model.Gender;
 import com.semenov.dossier.model.MaritalStatus;
 import com.semenov.dossier.model.Passport;
 import com.semenov.dossier.model.Status;
-import com.semenov.dossier.model.Theme;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DossierServiceTest {
+public class DocumentServiceTest {
 
-    @Mock
+    @Spy
     private DocumentService documentService;
 
-    @Mock
-    private MailService mailService;
-
-    @Mock
-    private ObjectMapper objectMapper;
-
-    @Mock
-    private DealClient dealClient;
-
-    @InjectMocks
-    private DossierService dossierService;
-
-
     @Test
-    public void finishRegistrationMessage() throws JsonProcessingException {
-        String text = "Dear ivan, finish registration your application id-1, please.";
-        String mail = "email";
-
+    public void createFiles() throws IOException {
         Client client = Client.builder()
                 .id(1L)
                 .firstName("ivan")
@@ -95,36 +72,14 @@ public class DossierServiceTest {
                 .appliedOffer(new LoanOfferDTO())
                 .build();
 
-        EmailMessageDTO emailMessageDTO = EmailMessageDTO.builder()
-                .applicationId(1L)
-                .address("email")
-                .theme(Theme.SEND_DOCUMENTS)
-                .build();
+        File file  = Files.createTempFile("1", ".txt").toFile();
+        File file1 = Files.createTempFile("2", ".txt").toFile();
+        File file2 = Files.createTempFile("3", ".txt").toFile();
 
-        when(objectMapper.readValue(text, EmailMessageDTO.class)).thenReturn(emailMessageDTO);
-        when((dealClient.getApplicationById(emailMessageDTO.getApplicationId()))).thenReturn(application);
+        List<File> expectedListFiles = List.of(file1, file, file2);
 
-        dossierService.finishRegistrationMessage(text);
+        List<File> actualListFiles = documentService.createFiles(application);
 
-        verify(mailService, times(1)).sendMessage(
-                argThat(email -> email.equals(mail)),
-                argThat(data -> data.equals(text))
-        );
-    }
-
-    @Test
-    public void sendDocumentRequest() {
-    }
-
-    @Test
-    public void sendDocument() {
-    }
-
-    @Test
-    public void getSesCode() {
-    }
-
-    @Test
-    public void signDocument() {
+        assertEquals(expectedListFiles.size(), actualListFiles.size());
     }
 }
