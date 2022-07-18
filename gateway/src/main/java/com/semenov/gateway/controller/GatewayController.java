@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -60,8 +61,8 @@ public class GatewayController {
 
     @PostMapping("/gateway/document/{applicationId}/code")
     @ApiOperation(value = "Подписать документы", notes = "Подписать документы")
-    public ResponseEntity<Void> signDocuments(@PathVariable Long applicationId) {
-        gatewayService.signDocument(applicationId);
+    public ResponseEntity<Void> signDocuments(@PathVariable Long applicationId, @RequestParam Integer sesCode) {
+        gatewayService.signDocument(applicationId, sesCode);
         return ResponseEntity.ok().build();
     }
 }

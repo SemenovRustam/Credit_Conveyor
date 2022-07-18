@@ -4,12 +4,12 @@ package com.semenov.gateway.client;
 import com.semenov.gateway.dto.FinishRegistrationRequestDTO;
 import com.semenov.gateway.entity.Application;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface DealClient {
     void signDocumentsRequest(@PathVariable Long applicationId);
 
     @PostMapping("/deal/document/{applicationId}/code")
-    void signDocuments(@PathVariable Long applicationId);
+    void signDocuments(@PathVariable Long applicationId, @RequestParam Integer sescode);
 
     @GetMapping("/deal/admin/application/{applicationId}")
     Application getApplicationById(@PathVariable Long applicationId);

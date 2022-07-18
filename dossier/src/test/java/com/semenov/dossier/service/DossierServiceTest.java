@@ -3,22 +3,16 @@ package com.semenov.dossier.service;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 
-import javax.mail.Address;
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
@@ -37,7 +31,7 @@ public class DossierServiceTest {
     private JavaMailSender javaMailSender;
 
     @InjectMocks
-    private DossierService dossierService;
+    private MailService mailService;
 
 
     @Test
@@ -45,7 +39,7 @@ public class DossierServiceTest {
         String sesCode = "1234";
         String receiver = "mail@mail.ru";
 
-        dossierService.sendSes(receiver, sesCode);
+        mailService.sendSes(receiver, sesCode);
 
         verify(javaMailSender, times(1)).send(
                 argThat((SimpleMailMessage smm) -> Objects.requireNonNull(smm.getTo())[0].equals(receiver))
@@ -57,7 +51,7 @@ public class DossierServiceTest {
         String receiver = "mail@mail.ru";
         String expectedText = "some text";
 
-        dossierService.sendMessage(receiver, expectedText);
+        mailService.sendMessage(receiver, expectedText);
 
         verify(javaMailSender, times(1)).send(
                 argThat((SimpleMailMessage message) -> Objects.requireNonNull(message.getTo())[0].equals(receiver) &&
@@ -73,7 +67,7 @@ public class DossierServiceTest {
         File file = new File("some.txt");
 
         when(javaMailSender.createMimeMessage()).thenReturn(message);
-        dossierService.sendDocument(receiver, file);
+        mailService.sendDocument(receiver, file);
 
         verify(javaMailSender, times(1)).createMimeMessage();
         verify(javaMailSender, times(1)).send(

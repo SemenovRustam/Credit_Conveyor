@@ -1,87 +1,121 @@
 package com.semenov.dossier.service;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.semenov.dossier.client.DealClient;
 import com.semenov.dossier.dto.EmailMessageDTO;
+import com.semenov.dossier.entity.Application;
+import com.semenov.dossier.model.Theme;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.Multipart;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class DossierService {
 
-    private final JavaMailSender javaMailSender;
-    private String filename;
+    private final DocumentService documentService;
+    private final MailService mailService;
     private final ObjectMapper objectMapper;
+    private final DealClient dealClient;
 
+    @KafkaListener(topics = "finish-registration", groupId = "deal")
+    public void finishRegistrationMessage(String data) {
+        EmailMessageDTO emailMessageDTO = getEmailMessageDTO(data);
+        Theme theme = emailMessageDTO.getTheme();
 
-    @Value("${mail.sender}")
-    private String senderEmail;
+        log.info("CONSUMER RECEIVED THE MESSAGE WITH TOPIC {}", theme);
 
-    public void sendSes(String receiver, String sesCode) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(senderEmail);
-        message.setTo(receiver);
-        message.setSubject("Ses code");
-        message.setText(sesCode);
-        javaMailSender.send(message);
-        log.info("message send");
+        Application application = dealClient.getApplicationById(emailMessageDTO.getApplicationId());
+        String text = String.format(
+                "Dear %s, finish registration your application id-%s, please.", application.getClient().getFirstName(), application.getId()
+        );
+        String address = emailMessageDTO.getAddress();
+        log.info("Dossier service try a send message for {}", address);
+
+        mailService.sendMessage(address, text);
+
+        log.info("Message for {} successfully delivered", address);
+
     }
 
-    public void sendMessage(String receiver, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(senderEmail);
-        message.setTo(receiver);
-        message.setSubject("Оформление кредита");
-        message.setText(text);
-        javaMailSender.send(message);
-        log.info("message send");
+    @KafkaListener(topics = "create-documents", groupId = "deal")
+    public void sendDocumentRequest(String data) {
+        EmailMessageDTO emailMessageDTO = getEmailMessageDTO(data);
+        Theme theme = emailMessageDTO.getTheme();
+
+        log.info("CONSUMER RECEIVED THE MESSAGE WITH TOPIC {}", theme);
+
+        Application application = dealClient.getApplicationById(emailMessageDTO.getApplicationId());
+        String address = emailMessageDTO.getAddress();
+
+        String messageText = String.format(
+                "Dear %s, can prepare and send documents for you?", application.getClient().getFirstName()
+        );
+
+        log.info("Dossier service try a send message for {}", emailMessageDTO.getAddress());
+        mailService.sendMessage(emailMessageDTO.getAddress(), messageText);
+        log.info("Message for {} successfully delivered", address);
     }
 
-    public void sendDocument(String receiver,File file ) {
+    @KafkaListener(topics = "send-documents", groupId = "deal")
+    public void sendDocument(String data) {
+        EmailMessageDTO emailMessageDTO = getEmailMessageDTO(data);
+        Theme theme = emailMessageDTO.getTheme();
+        String address = emailMessageDTO.getAddress();
+
+        log.info("CONSUMER RECEIVED THE MESSAGE WITH TOPIC {}", theme);
+
+        Application application = dealClient.getApplicationById(emailMessageDTO.getApplicationId());
+        List<File> files = documentService.createFiles(application);
+
+        log.info("Dossier service try a send message for {}", address);
+        files.forEach(file -> mailService.sendDocument(address, file));
+        log.info("Message for {} successfully delivered", address);
+    }
+
+    @KafkaListener(topics = "send-ses", groupId = "deal")
+    public void getSesCode(String data) {
+        EmailMessageDTO emailMessageDTO = getEmailMessageDTO(data);
+        Application application = dealClient.getApplicationById(emailMessageDTO.getApplicationId());
+        Theme theme = emailMessageDTO.getTheme();
+
+        log.info("CONSUMER RECEIVED THE MESSAGE WITH TOPIC {}", theme);
+
+        String sesCode = application.getSesCode().toString();
+        String address = emailMessageDTO.getAddress();
+
+        mailService.sendSes(address, sesCode);
+
+        log.info("Message for {} successfully delivered", address);
+
+    }
+
+    @KafkaListener(topics = "credit-issued", groupId = "deal")
+    public void signDocument(String data) {
+        EmailMessageDTO emailMessageDTO = getEmailMessageDTO(data);
+        Theme theme = emailMessageDTO.getTheme();
+        String address = emailMessageDTO.getAddress();
+        log.info("CONSUMER RECEIVED THE MESSAGE WITH TOPIC {}", theme);
+
+        String text = "Congratulations! Loan successfully approved!";
+
+        mailService.sendMessage(address, text);
+        log.info("Message for {} successfully delivered", address);
+    }
+
+    private EmailMessageDTO getEmailMessageDTO(String data) {
+        EmailMessageDTO emailMessageDTO = null;
         try {
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true);
-            mimeMessageHelper.setTo(receiver);
-            mimeMessageHelper.setFrom(new InternetAddress(senderEmail, senderEmail));
-
-            message.setSubject("Оформление кредита");
-            Multipart multipart = new MimeMultipart();
-            MimeBodyPart fileBodyPart = new MimeBodyPart();
-
-            DataSource fileDataSource = new FileDataSource(file);
-            fileBodyPart.setDataHandler(new DataHandler(fileDataSource));
-            fileBodyPart.setFileName(filename + ".txt");
-            multipart.addBodyPart(fileBodyPart);
-
-            message.setContent(multipart);
-            javaMailSender.send(message);
-            log.info("message send");
-        } catch (Exception e) {
-            log.error(e.getMessage());
+            emailMessageDTO = objectMapper.readValue(data, EmailMessageDTO.class);
+        } catch (JsonProcessingException e) {
+            log.warn(e.getMessage());
         }
+        return emailMessageDTO;
     }
-
-
 }
