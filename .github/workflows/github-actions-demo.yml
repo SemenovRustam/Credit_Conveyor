@@ -37,6 +37,9 @@ jobs:
         run: mvn -B clean install --file pom.xml
 
   tests-covarage:
+    defaults:
+      run:
+        working-directory: ./application
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
