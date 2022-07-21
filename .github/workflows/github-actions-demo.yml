@@ -47,11 +47,51 @@ jobs:
         with:
           java-version: 1.11
 
-      - name: Maven Verify
+      - name: Maven Verify Application
         working-directory: ./application
         run: mvn -B clean verify
 
-      - name: Test Coverage
+      - name: Test Coverage Application
         uses: codecov/codecov-action@v3
         with:
           directory: ./application
+
+
+      - name: Maven Verify Conveyor
+        working-directory: ./conveyor
+        run: mvn -B clean verify
+
+      - name: Test Coverage Conveyor
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./conveyor
+
+
+      - name: Maven Verify Deal
+        working-directory: ./deal
+        run: mvn -B clean verify
+
+      - name: Test Coverage Deal
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./deal
+
+
+      - name: Maven Verify Dossier
+        working-directory: ./dossier
+        run: mvn -B clean verify
+
+      - name: Test Coverage Dossier
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./dossier
+
+
+      - name: Maven Verify Gateway
+        working-directory: ./gateway
+        run: mvn -B clean verify
+
+      - name: Test Coverage Gateway
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./gateway
