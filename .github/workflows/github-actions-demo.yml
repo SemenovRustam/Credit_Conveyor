@@ -50,5 +50,6 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage
-        working-directory: ./application
         uses: codecov/codecov-action@v3
+          with:
+            directory: ./application
