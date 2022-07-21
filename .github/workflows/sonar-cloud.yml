@@ -14,7 +14,7 @@ jobs:
           java-version: 1.11
 
       - name: Analyze with SonarCloud
-      - working-directory: ./application
+        working-directory: ./application
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
