@@ -16,6 +16,10 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
-      - name: Build with Maven
+      - name: Build Application with Maven
         working-directory: ./application
-        run: mvn -B package --file pom.xml
+        run: mvn -B clean package --file pom.xml
+
+      - name: Build Application with Maven
+        working-directory: ./credit_conveyor
+        rin: mvn -B clean package --file pom.xml
