@@ -2,11 +2,12 @@ name: Java CI with Maven
 
 on:
   push:
-  pull_request:
+    paths:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -16,4 +17,5 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
+        working-directory: ./application
         run: mvn -B package --file pom.xml
