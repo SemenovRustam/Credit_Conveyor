@@ -1,8 +1,7 @@
 name: Java CI with Maven
 
-on:
-  push:
-    paths:
+on: [push, pull_request]
+
 
 jobs:
   build:
