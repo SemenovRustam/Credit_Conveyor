@@ -1,4 +1,4 @@
-package com.semenov.dossier;
+package com.semenov.dossier.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,9 +16,6 @@ import com.semenov.dossier.model.MaritalStatus;
 import com.semenov.dossier.model.Passport;
 import com.semenov.dossier.model.Status;
 import com.semenov.dossier.model.Theme;
-import com.semenov.dossier.service.DocumentService;
-import com.semenov.dossier.service.DossierService;
-import com.semenov.dossier.service.MailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

@@ -1,6 +1,5 @@
-package com.semenov.dossier;
+package com.semenov.dossier.service;
 
-import com.semenov.dossier.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

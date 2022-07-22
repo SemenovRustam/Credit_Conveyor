@@ -1,4 +1,4 @@
-package com.semenov.dossier;
+package com.semenov.dossier.service;
 
 import com.semenov.dossier.dto.LoanOfferDTO;
 import com.semenov.dossier.entity.Application;
@@ -11,7 +11,6 @@ import com.semenov.dossier.model.Gender;
 import com.semenov.dossier.model.MaritalStatus;
 import com.semenov.dossier.model.Passport;
 import com.semenov.dossier.model.Status;
-import com.semenov.dossier.service.DocumentService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Spy;
