@@ -7,3 +7,4 @@ Neoflex company internship project
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=semenovrustam_Credit_Conveyor&metric=coverage)](https://sonarcloud.io/summary/new_code?id=semenovrustam_Credit_Conveyor)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=semenovrustam_Credit_Conveyor&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=semenovrustam_Credit_Conveyor)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=semenovrustam_Credit_Conveyor&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=semenovrustam_Credit_Conveyor)
+[![codecov](https://codecov.io/gh/SemenovRustam/Credit_Conveyor/branch/develop/graph/badge.svg?token=AA23Z1DBXM)](https://codecov.io/gh/SemenovRustam/Credit_Conveyor)
