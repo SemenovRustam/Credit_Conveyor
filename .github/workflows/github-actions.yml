@@ -44,12 +44,13 @@ jobs:
         with:
           java-version: 1.11
 
+
       - name: Maven Verify Application
         working-directory: ./application
         run: mvn -B clean verify
 
       - name: Test Coverage Application
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v3 -F Application
         with:
           directory: ./application
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -60,7 +61,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Conveyor
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v3  -F Conveyor
         with:
           directory: ./conveyor
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -71,7 +72,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Deal
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v3 -F Deal
         with:
           directory: ./deal
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -82,7 +83,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Dossier
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v3 -F Dossier
         with:
           directory: ./dossier
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -93,7 +94,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Gateway
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v3 -F Gateway
         with:
           directory: ./gateway
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -122,12 +123,14 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=semenovrustam_Credit_Conveyor
 
+
       - name: Analyze Deal with SonarCloud
         working-directory: ./deal
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=semenovrustam_Credit_Conveyor
+
 
       - name: Analyze Dossier with SonarCloud
         working-directory: ./dossier
@@ -136,11 +139,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=semenovrustam_Credit_Conveyor
 
+
       - name: Analyze Gateway with SonarCloud
         working-directory: ./gateway
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=semenovrustam_Credit_Conveyor
-
-

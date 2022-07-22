@@ -1,0 +1,54 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 40%
+    patch:
+      application:
+        target: 60%
+        flags: -Application
+
+      conveyor:
+        target: 60%
+        flags: -Conveyor
+
+      deal:
+        target: 60%
+        flags: -Deal
+
+      dossier:
+        targer: 60%
+        flags: -Dossier
+
+      Gateway:
+        target: 60%
+        flags: -Gateway
+
+comment:
+  layout: "reach, diff, flags, files"
+
+flags:
+  application:
+    carryforward: false
+    paths:
+      - ./application
+
+  conveyor:
+    carryforward: false
+    paths:
+      - ./conveyor
+
+  deal:
+    carryforward: false
+    paths:
+      - ./deal
+
+  dossier:
+    carryforward: false
+    paths:
+      - ./dossier
+
+  gateway:
+    carryforward: false
+    paths:
+      - ./gateway
