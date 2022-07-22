@@ -54,7 +54,7 @@ jobs:
         with:
           directory: ./application
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags:  Application
+          flags: Application
 
 
       - name: Maven Verify Conveyor
@@ -66,7 +66,7 @@ jobs:
         with:
           directory: ./conveyor
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags:  Conveyor
+          flags: Conveyor
 
 
       - name: Maven Verify Deal
@@ -78,7 +78,7 @@ jobs:
         with:
           directory: ./deal
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags:  Deal
+          flags: Deal
 
 
       - name: Maven Verify Dossier
@@ -90,7 +90,7 @@ jobs:
         with:
           directory: ./dossier
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags:  Dossier
+          flags: Dossier
 
 
       - name: Maven Verify Gateway
@@ -102,7 +102,7 @@ jobs:
         with:
           directory: ./gateway
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags:  Gateway
+          flags: Gateway
 
   sonarcloud:
     runs-on: ubuntu-latest
