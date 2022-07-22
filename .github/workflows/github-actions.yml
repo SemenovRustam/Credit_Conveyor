@@ -52,7 +52,7 @@ jobs:
       - name: Test Coverage Application
         uses: codecov/codecov-action@v3
         with:
-          directory: ./application/service
+          directory: ./application
           token: ${{ secrets.CODECOV_TOKEN }}
           flags:  Application
 
