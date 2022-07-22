@@ -240,7 +240,8 @@ public class DossierServiceTest {
     @Test
     public void getSesCode() throws JsonProcessingException {
         String data = "data";
-        String ses = "1001";
+        String ses = "1001" + "\n\n\nTo confirm the application, follow the link and enter the code "
+                + "\n http://localhost:8085/swagger-ui/#/gateway-controller/signDocumentsUsingPOST";
 
         Client client = Client.builder()
                 .id(1L)

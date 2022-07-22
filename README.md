@@ -28,4 +28,5 @@ Conveyor возвращает через МС Deal пользователю 4 п
 куда клиент должен отправить полученный код в МС Deal.
 Если полученный код совпадает с отправленным, МС Deal выдает кредит (меняет статус сущности "Кредит" на ISSUED, а статус заявки на CREDIT_ISSUED)
 
-![model](https://user-images.githubusercontent.com/88612028/180473667-e918a643-3cfa-4c8e-90ba-d5c5e80d30d7.jpg)
+
+ ![model](https://user-images.githubusercontent.com/88612028/180473667-e918a643-3cfa-4c8e-90ba-d5c5e80d30d7.jpg)
