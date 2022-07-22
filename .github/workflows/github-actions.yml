@@ -50,10 +50,11 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Application
-        uses: codecov/codecov-action@v3 -c -F Application
+        uses: codecov/codecov-action@v3
         with:
           directory: ./application
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: -F Application
 
 
       - name: Maven Verify Conveyor
@@ -61,10 +62,11 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Conveyor
-        uses: codecov/codecov-action@v3  -c -F Conveyor
+        uses: codecov/codecov-action@v3
         with:
           directory: ./conveyor
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: -F Conveyor
 
 
       - name: Maven Verify Deal
@@ -72,10 +74,11 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Deal
-        uses: codecov/codecov-action@v3 -c -F Deal
+        uses: codecov/codecov-action@v3
         with:
           directory: ./deal
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: -F Deal
 
 
       - name: Maven Verify Dossier
@@ -83,10 +86,11 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Dossier
-        uses: codecov/codecov-action@v3 -c -F Dossier
+        uses: codecov/codecov-action@v3
         with:
           directory: ./dossier
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: -F Dossier
 
 
       - name: Maven Verify Gateway
@@ -94,10 +98,11 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Gateway
-        uses: codecov/codecov-action@v3 -c -F Gateway
+        uses: codecov/codecov-action@v3
         with:
           directory: ./gateway
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: -F Gateway
 
   sonarcloud:
     runs-on: ubuntu-latest
