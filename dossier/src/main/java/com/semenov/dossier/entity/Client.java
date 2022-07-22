@@ -1,11 +1,10 @@
-package com.semenov.application.dto;
+package com.semenov.dossier.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.semenov.application.Application;
-import com.semenov.application.model.Employment;
-import com.semenov.application.model.Gender;
-import com.semenov.application.model.MaritalStatus;
-import com.semenov.application.model.Passport;
+
+import com.semenov.dossier.model.Employment;
+import com.semenov.dossier.model.Gender;
+import com.semenov.dossier.model.MaritalStatus;
+import com.semenov.dossier.model.Passport;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

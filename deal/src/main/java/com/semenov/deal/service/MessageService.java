@@ -64,11 +64,20 @@ public class MessageService {
         Application application = getApplication(applicationId);
         Integer sesCode = createSesCode();
         actualSescode = sesCode;
-        kafkaTemplate.send(getTopic(Theme.SEND_SES), sesCode.toString());
+
 
         log.debug("SET SES CODE {} FOR APPLICATION {} ", sesCode, application);
         application.setSesCode(sesCode);
         application.setStatus(Status.DOCUMENT_SIGNED);
+
+
+        sendMessageForConsumer(EmailMessageDTO.builder()
+        .address(application.getClient().getEmail())
+        .applicationId(applicationId)
+        .theme(Theme.SEND_SES)
+        .build());
+        log.info("KAFKA PRODUCER SEND KAFKA CONSUMER APPLICATION WITH SES CODE");
+
         log.debug("UPDATE APPLICATION IN DB");
         applicationRepository.save(application);
 
@@ -139,7 +148,7 @@ public class MessageService {
         try {
             String jsonEmailDTO = objectMapper.writeValueAsString(messageDTO);
             kafkaTemplate.send(topic, jsonEmailDTO);
-            log.info("kafka send message for consumer with topic {}", topic);
+            log.info("KAFKA SEND MESSAGE FOR CONSUMER WITH TOPIC {}", topic);
         } catch (JsonProcessingException e) {
             log.warn(e.getMessage());
         }

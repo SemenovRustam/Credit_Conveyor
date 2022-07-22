@@ -1,5 +1,7 @@
 package com.semenov.deal.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.semenov.deal.dto.LoanOfferDTO;
 import com.semenov.deal.model.ApplicationHistory;
 import com.semenov.deal.model.Status;
@@ -7,9 +9,8 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -42,6 +43,8 @@ public class Application {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "client", nullable = false)
+    @JsonManagedReference
+    @ToString.Exclude
     private Client client;
 
     @OneToOne

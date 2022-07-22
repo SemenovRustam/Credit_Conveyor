@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GatewayService{
+public class GatewayService {
 
     private final DealClient dealClient;
     private final ConveyorApplicationClient conveyorApplicationClient;
@@ -36,18 +36,18 @@ public class GatewayService{
         log.info("CREDIT CALCULATE SUCCESSFULLY");
     }
 
-    public void sendDocumentsRequest(Long applicationId){
+    public void sendDocumentsRequest(Long applicationId) {
         dealClient.sendDocumentsRequest(applicationId);
         log.info("REQUEST DOCUMENT SEND");
     }
 
-     public void signDocumentRequest(Long applicationId){
+    public void signDocumentRequest(Long applicationId) {
         dealClient.signDocumentsRequest(applicationId);
         log.info("SIGN DOCUMENTS REQUEST");
-     }
+    }
 
-     public void signDocument(Long applicationId){
-        dealClient.signDocuments(applicationId);
+    public void signDocument(Long applicationId, Integer sesCode) {
+        dealClient.signDocuments(applicationId, sesCode);
         log.info("DOCUMENTS SIGN");
-     }
+    }
 }

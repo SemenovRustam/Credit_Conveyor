@@ -146,11 +146,13 @@ public class GatewayServiceTest {
     @Test
     public void signDocument() {
         long appIdExpected = 91L;
+        Integer sescode = 1234;
 
-        gatewayService.signDocument(appIdExpected);
+        gatewayService.signDocument(appIdExpected, sescode);
 
         verify(dealClient, times(1)).signDocuments(
-                argThat(applicationId -> applicationId.equals(appIdExpected))
+                argThat(applicationId -> applicationId.equals(appIdExpected)),
+                argThat(code -> code.equals(sescode))
         );
     }
 }
