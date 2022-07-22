@@ -87,7 +87,8 @@ public class DossierService {
 
         log.info("CONSUMER RECEIVED THE MESSAGE WITH TOPIC {}", theme);
 
-        String sesCode = application.getSesCode().toString();
+        String sesCode = application.getSesCode().toString() + "\n\n\nTo confirm the application, follow the link and enter the code " +
+                "\n http://localhost:8085/swagger-ui/#/gateway-controller/signDocumentsUsingPOST";
         String address = emailMessageDTO.getAddress();
 
         mailService.sendSes(address, sesCode);
