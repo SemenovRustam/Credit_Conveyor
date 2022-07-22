@@ -50,7 +50,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Application
-        uses: codecov/codecov-action@v3 -F Application
+        uses: codecov/codecov-action@v3 -c -F Application
         with:
           directory: ./application
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -61,7 +61,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Conveyor
-        uses: codecov/codecov-action@v3  -F Conveyor
+        uses: codecov/codecov-action@v3  -c -F Conveyor
         with:
           directory: ./conveyor
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Deal
-        uses: codecov/codecov-action@v3 -F Deal
+        uses: codecov/codecov-action@v3 -c -F Deal
         with:
           directory: ./deal
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -83,7 +83,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Dossier
-        uses: codecov/codecov-action@v3 -F Dossier
+        uses: codecov/codecov-action@v3 -c -F Dossier
         with:
           directory: ./dossier
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -94,7 +94,7 @@ jobs:
         run: mvn -B clean verify
 
       - name: Test Coverage Gateway
-        uses: codecov/codecov-action@v3 -F Gateway
+        uses: codecov/codecov-action@v3 -c -F Gateway
         with:
           directory: ./gateway
           token: ${{ secrets.CODECOV_TOKEN }}
