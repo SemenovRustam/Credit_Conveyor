@@ -7,7 +7,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=semenovrustam_Credit_Conveyor&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=semenovrustam_Credit_Conveyor)
 [![codecov](https://codecov.io/gh/SemenovRustam/Credit_Conveyor/branch/develop/graph/badge.svg?token=AA23Z1DBXM)](https://codecov.io/gh/SemenovRustam/Credit_Conveyor)
 
-# Credit Conveyor
+# Credit conveyor
 
 Пользователь отправляет заявку на кредит.
 МС Application осуществляет прескоринг заявки и если прескоринг проходит,
@@ -27,3 +27,5 @@ Conveyor возвращает через МС Deal пользователю 4 п
 Клиент может отказаться от условий или согласиться. Если согласился - МС Deal на почту отправляет код и ссылку на подписание документов,
 куда клиент должен отправить полученный код в МС Deal.
 Если полученный код совпадает с отправленным, МС Deal выдает кредит (меняет статус сущности "Кредит" на ISSUED, а статус заявки на CREDIT_ISSUED)
+
+![Credit_conveyor](https://user-images.githubusercontent.com/88612028/180471686-b4152f43-f80a-4ca0-9b3d-58c33d51e89a.jpg)
