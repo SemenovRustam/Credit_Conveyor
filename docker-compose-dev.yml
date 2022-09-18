@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   zookeeper:
     image: wurstmeister/zookeeper
@@ -17,3 +18,18 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: "finish-registration:1:1,create-documents:1:1,send-documents:1:1,send-ses:1:1,credit-issued:1:1,application-denied:1:1"
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./deal/src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
