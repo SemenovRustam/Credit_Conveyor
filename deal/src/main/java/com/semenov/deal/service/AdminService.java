@@ -3,7 +3,6 @@ package com.semenov.deal.service;
 import com.semenov.deal.entity.Application;
 import com.semenov.deal.exceptionhandling.DealAppException;
 import com.semenov.deal.repository.ApplicationRepository;
-import liquibase.pro.packaged.D;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

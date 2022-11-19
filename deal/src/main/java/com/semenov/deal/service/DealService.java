@@ -45,11 +45,8 @@ public class DealService {
     private final ModelMapper mapper;
     private final GeneratorUtills generatorUtills;
 
-
     public List<LoanOfferDTO> getLoanOffers(LoanApplicationRequestDTO loanApplicationRequestDTO) {
-
         Client client = mapper.map(loanApplicationRequestDTO, Client.class);
-
         log.debug("CREATE NEW CLIENT {}", client);
 
         clientRepository.save(client);
