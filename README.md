@@ -30,3 +30,6 @@ Conveyor возвращает через МС Deal пользователю 4 п
 
 
  ![model](https://user-images.githubusercontent.com/88612028/180473667-e918a643-3cfa-4c8e-90ba-d5c5e80d30d7.jpg)
+
+docker-compose -f docker-compose-dev.yml up
+
